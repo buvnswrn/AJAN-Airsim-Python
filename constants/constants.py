@@ -1,0 +1,7 @@
+## FLASK_CONFIG
+
+FLASK_HOST = "0.0.0.0"
+FLASK_PORT = 5002
+
+## Airsim
+CAPTURE_FOLDER = "."
