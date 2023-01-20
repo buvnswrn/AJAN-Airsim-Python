@@ -1,5 +1,4 @@
 import rdflib
-from rdflib.namespace import FOAF
 
 
 def parse_and_get_actions(data_string, fmt):

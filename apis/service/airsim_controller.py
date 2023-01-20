@@ -6,32 +6,42 @@ import airsim
 import logging
 from .helper import coordinates as c
 from .UnityService import get_navmesh_path
+import sys
+
+# logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 client: airsim.MultirotorClient = airsim.MultirotorClient()
 client.confirmConnection()
 client.enableApiControl(True)
 
+_logger = logging.getLogger(__name__)
+
+
+def set_logger(logger):
+    global _logger
+    _logger = logger
+
 
 def takeoff():
-    logging.info("Taking off...")
+    _logger.info("Taking off...")
     client.takeoffAsync().join()
     return True
 
 
 def land():
-    logging.info("Landing...")
+    _logger.info("Landing...")
     client.landAsync().join()
     return True
 
 
 def hover():
-    logging.info("Hovering...")
+    _logger.info("Hovering...")
     client.hoverAsync().join()
     return True
 
 
 def move(x, y, z, v):
-    logging.info("Moving...")
+    _logger.info("Moving to:"+str(x)+","+str(y)+","+str(z)+"in velocity:"+str(v))
     current_position = client.simGetVehiclePose().position
     curr_x, curr_y, curr_z = c.get_unity_values(current_position.x_val, current_position.y_val, current_position.z_val)
     navmesh_response = get_navmesh_path(curr_x, curr_y, curr_z, x, y, z)

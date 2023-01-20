@@ -1,9 +1,14 @@
 from flask_restx import Namespace, Resource, fields
 from flask import Response, request
 from .service import UnityService
+import constants.constants as constants
 
 unity_service_ns = Namespace('Unity-service', description="Unity Service for retrieving object data and Navmesh Path "
                                                           "from Unity")
+unity_service_ns.logger.setLevel(constants.LOG_LEVEL)
+unity_service_ns.logger.info("Starting Unity Service")
+
+UnityService.set_logger(unity_service_ns.logger)
 
 # region Request models
 coordinates_data_format = unity_service_ns.model("Coordinates", {
@@ -33,7 +38,7 @@ class GetObjects(Resource):
         # TODO: receive RDF input from AJAN service
         name = request.json['objectOfInterest']
         response = UnityService.get_objects(name)
-        print(UnityService.get_position_for_symbolic_location(name))
+        unity_service_ns.logger.debug(UnityService.get_position_for_symbolic_location(name))
         return response
 
 
