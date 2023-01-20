@@ -5,12 +5,11 @@ from .service import UnityService
 unity_service_ns = Namespace('Unity-service', description="Unity Service for retrieving object data and Navmesh Path "
                                                           "from Unity")
 
-
 # region Request models
 coordinates_data_format = unity_service_ns.model("Coordinates", {
-        "x": fields.Float(required=True, description="value of x coordinate"),
-        "y": fields.Float(required=True, description="value of y coordinate"),
-        "z": fields.Float(required=True, description="value of z coordinate"),
+    "x": fields.Float(required=True, description="value of x coordinate"),
+    "y": fields.Float(required=True, description="value of y coordinate"),
+    "z": fields.Float(required=True, description="value of z coordinate"),
 })
 
 navmesh_data_format = unity_service_ns.model('NavmeshDataFormat', {
@@ -18,15 +17,24 @@ navmesh_data_format = unity_service_ns.model('NavmeshDataFormat', {
     "end_position": fields.Nested(coordinates_data_format)
 })
 
+get_object_data_format = unity_service_ns.model('GetObjectDataFormat', {
+    "objectOfInterest": fields.String(required=True, description="Object of interest")
+})
+
+
 # endregion
 
 
 @unity_service_ns.route('/get-objects')
 @unity_service_ns.doc(description="Get objects and their positions from Unity")
 class GetObjects(Resource):
+    @unity_service_ns.expect(get_object_data_format)
     def post(self):
         # TODO: receive RDF input from AJAN service
-        return Response(status=200)
+        name = request.json['objectOfInterest']
+        response = UnityService.get_objects(name)
+        print(UnityService.get_position_for_symbolic_location(name))
+        return response
 
 
 @unity_service_ns.route('/get-navmesh-path')
