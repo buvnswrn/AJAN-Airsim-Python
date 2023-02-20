@@ -29,17 +29,15 @@ class ExecuteActions(Resource):
 def executeActions(actions_array):
     ajan_plugin_ns.logger.debug("Received actions: " + str(actions_array))
     for actions in actions_array:
-        if actions.__contains__("do"):
+        if actions.__contains__("take-off"):
             ajan_plugin_ns.logger.info("Executing action: " + actions)
-            action = actions[3:actions.__len__()-1]
-            robot, action = action.split(",")
-            action = action.lstrip()
-            if action == "take_off":
-                airsim_controller.takeoff()
-            elif action == "land":
-                airsim_controller.land()
-            elif action == "capture_image":
-                airsim_controller.captureImage(constants.CAPTURE_FOLDER)
+            # TODO: have to watch out for the location to take off
+            airsim_controller.takeoff()
+        elif actions.__contains__("land"):
+            airsim_controller.land()
+        elif actions.__contains__("captureImage"):
+            # TODO: have to watch out for the boxes to take pictures
+            airsim_controller.captureImage(constants.CAPTURE_FOLDER)
         elif actions.__contains__("moveto"):
             ajan_plugin_ns.logger.info("Executing action: " + actions)
             robot, action = actions[7:actions.__len__()-1].split(",")
