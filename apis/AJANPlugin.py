@@ -21,7 +21,8 @@ class ExecuteActions(Resource):
         data = str(request.data.decode('utf-8'))
         actions_array = AJANPlugin.parse_and_get_actions(data, "turtle")
         ajan_plugin_ns.logger.debug(actions_array)
-        executeActions(actions_array)
+        for key in actions_array:
+            executeActions(actions_array[key])
         return Response(status=200)
 
 
