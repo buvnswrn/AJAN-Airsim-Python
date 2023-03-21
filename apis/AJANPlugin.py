@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource
 from flask import Response, request
-from .service import AJANPlugin, airsim_controller, UnityService
+from .service import AJANPlugin, airsim_controller, UnityService, RealWorldExecution
 from constants import constants
+from multiprocessing import Process
 import logging
 import sys
 
@@ -22,35 +23,42 @@ class ExecuteActions(Resource):
         actions_array = AJANPlugin.parse_and_get_actions(data, "turtle")
         ajan_plugin_ns.logger.debug(actions_array)
         for key in actions_array:
-            executeActions(actions_array[key])
+            execute_actions(actions_array[key])
         return Response(status=200)
 
 
-def executeActions(actions_array):
+def execute_actions(actions_array):
     ajan_plugin_ns.logger.debug("Received actions: " + str(actions_array))
     for actions in actions_array:
         for action in actions:
+            simulation = None
+            real_world_execution = None
             if action.__contains__("take-off"):
                 ajan_plugin_ns.logger.info("Executing action: " + action)
-                # TODO: have to watch out for the location to take off
-                airsim_controller.takeoff()
-                # TODO: Write a lab execution API for Takeoff
+                simulation = Process(target=airsim_controller.takeoff)
+                real_world_execution = Process(target=RealWorldExecution.takeoff)
             elif action.__contains__("land"):
-                airsim_controller.land()
-                # TODO: Write a lab execution API for Landing
+                simulation = Process(target=airsim_controller.land)
+                real_world_execution = Process(target=RealWorldExecution.land)
             elif action.__contains__("captureImage"):
                 # TODO: have to watch out for the boxes to take pictures
-                airsim_controller.captureImage(constants.CAPTURE_FOLDER)
-                # TODO: Write a lab execution API for Capture Image
+                simulation = Process(target=airsim_controller.captureImage, args=(constants.CAPTURE_FOLDER,))
+                real_world_execution = Process(target=RealWorldExecution.capture_image, args=(constants.CAPTURE_FOLDER,))
             elif action.__contains__("moveto"):
                 ajan_plugin_ns.logger.info("Executing action: " + action)
                 robot, action = action[7:action.__len__()-1].split(",")
                 action = action.replace("$", "").replace(")", "").lstrip()
                 x, y, z = UnityService.get_position_for_symbolic_location(action)
+                # TODO: Find a way to pass multiple parameters to process in python
                 airsim_controller.move(x, y, z, 10)
-                # TODO: Write a lab execution API for Moving
+                simulation = Process(target=airsim_controller.move, args=(x, y, z, 10,))
+                real_world_execution = Process(target=RealWorldExecution.move, args=(x, y, z,))
+                # TODO: Find a way to get the symbolic location of objects in the scene in real world
             else:
                 ajan_plugin_ns.logger.info("Action not supported: " + action)
+            if simulation is not None and real_world_execution is not None:
+                simulation.start()
+                real_world_execution.start()
 
 
 
