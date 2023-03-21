@@ -20,12 +20,21 @@ def parse_and_get_actions(data_string, fmt):
                 round_num = int(round_num)
                 turn_num = int(turn_num)
             try:
-                turn_dict = actions[round_num]
+                round_dict = actions[round_num]
             except KeyError:
                 actions[round_num] = dict()
+            try:
+                turn_dict = actions[round_num][turn_num]
+            except KeyError:
+                actions[round_num][turn_num] = list()
             first_element = g.value(rest, RDF.first)
             if first_element is not None:
-                actions[round_num][turn_num] = first_element.__str__()
+                if actions[round_num][turn_num] is not None:
+                    if isinstance(actions[round_num][turn_num], list):
+                        actions[round_num][turn_num].append(first_element.__str__())
+                else:
+                    actions[round_num][turn_num] = list()
+                    actions[round_num][turn_num].append(first_element.__str__())
             rest = g.objects(rest, RDF.rest).__next__()
     # formatting the actions dictionary to list
     sorted_actions = dict()

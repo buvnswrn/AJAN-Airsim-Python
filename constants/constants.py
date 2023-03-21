@@ -7,7 +7,7 @@ FLASK_PORT = 5002
 
 ## Airsim
 CAPTURE_FOLDER = "./imgs/"
-
+IMAGE_EXT = ".png"
 ## Unity Service
 URL = "http://localhost:8099/"
 NAVMESH_PATH_URL = URL + "navmeshpath/"

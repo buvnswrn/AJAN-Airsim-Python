@@ -29,23 +29,28 @@ class ExecuteActions(Resource):
 def executeActions(actions_array):
     ajan_plugin_ns.logger.debug("Received actions: " + str(actions_array))
     for actions in actions_array:
-        if actions.__contains__("take-off"):
-            ajan_plugin_ns.logger.info("Executing action: " + actions)
-            # TODO: have to watch out for the location to take off
-            airsim_controller.takeoff()
-        elif actions.__contains__("land"):
-            airsim_controller.land()
-        elif actions.__contains__("captureImage"):
-            # TODO: have to watch out for the boxes to take pictures
-            airsim_controller.captureImage(constants.CAPTURE_FOLDER)
-        elif actions.__contains__("moveto"):
-            ajan_plugin_ns.logger.info("Executing action: " + actions)
-            robot, action = actions[7:actions.__len__()-1].split(",")
-            action = action.lstrip()
-            x, y, z = UnityService.get_position_for_symbolic_location(action)
-            airsim_controller.move(x, y, z, 10)
-        else:
-            ajan_plugin_ns.logger.info("Action not supported: " + actions)
+        for action in actions:
+            if action.__contains__("take-off"):
+                ajan_plugin_ns.logger.info("Executing action: " + action)
+                # TODO: have to watch out for the location to take off
+                airsim_controller.takeoff()
+                # TODO: Write a lab execution API for Takeoff
+            elif action.__contains__("land"):
+                airsim_controller.land()
+                # TODO: Write a lab execution API for Landing
+            elif action.__contains__("captureImage"):
+                # TODO: have to watch out for the boxes to take pictures
+                airsim_controller.captureImage(constants.CAPTURE_FOLDER)
+                # TODO: Write a lab execution API for Capture Image
+            elif action.__contains__("moveto"):
+                ajan_plugin_ns.logger.info("Executing action: " + action)
+                robot, action = action[7:action.__len__()-1].split(",")
+                action = action.replace("$", "").replace(")", "").lstrip()
+                x, y, z = UnityService.get_position_for_symbolic_location(action)
+                airsim_controller.move(x, y, z, 10)
+                # TODO: Write a lab execution API for Moving
+            else:
+                ajan_plugin_ns.logger.info("Action not supported: " + action)
 
 
 
