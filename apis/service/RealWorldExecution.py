@@ -79,14 +79,14 @@ def move(x, y, z):
 
 def capture_image(capture_folder):
     check_exists_or_create(capture_folder)
-    logging.info("Capturing image...")
-    filename = capture_folder + "captured_image" + time.strftime("%Y%m%d-%H%M%S") + constants.constants.IMAGE_EXT
+    __logger.info("Capturing image...")
+    filename = capture_folder + "captured_world_image_" + time.strftime("%Y%m%d-%H%M%S") + constants.constants.IMAGE_EXT
     try:
         response = requests.get(MQTT.LIVE_IMAGE_URL)
         img = numpy.array(Image.open(BytesIO(response.content)).convert('RGB'))[:, :, ::-1].copy()
         cv2.imwrite(filename, img)
     except:
-        logging.debug("Cannot save Image")
+        __logger.debug("Cannot save Image")
 
 
 # region Helper Functions
