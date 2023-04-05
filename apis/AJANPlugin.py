@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from flask import Response, request
 from .service import AJANPlugin, airsim_controller, UnityService, RealWorldExecution
 from constants import constants
@@ -13,8 +13,17 @@ ajan_plugin_ns.logger.setLevel(constants.LOG_LEVEL)
 ajan_plugin_ns.logger.info("Starting AJAN Service")
 # logging.getLogger().addHandler(logging.StreamHandler())
 
+# region Models
+rdf_model = ajan_plugin_ns.model("RDFModel", {
+    'rdf_data': fields.String(required=True, description="The RDF Data model as a string")
+})
+
+
+# endregion
+
 
 @ajan_plugin_ns.route('/execute_actions')
+@ajan_plugin_ns.expect(rdf_model)
 @ajan_plugin_ns.doc(description="Execute actions from RDF Input")
 class ExecuteActions(Resource):
     @ajan_plugin_ns.doc(description="Execute actions from RDF Input")
@@ -43,10 +52,11 @@ def execute_actions(actions_array):
             elif action.__contains__("captureImage"):
                 # TODO: have to watch out for the boxes to take pictures
                 simulation = Process(target=airsim_controller.captureImage, args=(constants.CAPTURE_FOLDER,))
-                real_world_execution = Process(target=RealWorldExecution.capture_image, args=(constants.CAPTURE_FOLDER,))
+                real_world_execution = Process(target=RealWorldExecution.capture_image,
+                                               args=(constants.CAPTURE_FOLDER,))
             elif action.__contains__("moveto"):
                 ajan_plugin_ns.logger.info("Executing action: " + action)
-                robot, action = action[7:action.__len__()-1].split(",")
+                robot, action = action[7:action.__len__() - 1].split(",")
                 action = action.replace("$", "").replace(")", "").lstrip()
                 x, y, z = UnityService.get_position_for_symbolic_location(action)
                 # TODO: Find a way to pass multiple parameters to process in python
@@ -59,7 +69,3 @@ def execute_actions(actions_array):
             if simulation is not None and real_world_execution is not None:
                 simulation.start()
                 real_world_execution.start()
-
-
-
-
