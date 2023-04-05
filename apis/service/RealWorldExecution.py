@@ -19,6 +19,9 @@ __logger = logging.getLogger(__name__)
 
 known_position = {"position": "Drone-Home"}
 
+def set_logger(logger):
+    global __logger
+    __logger = logger
 
 def get_navigation():
     global __navigation
