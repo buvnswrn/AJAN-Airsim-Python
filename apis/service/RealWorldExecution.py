@@ -53,7 +53,7 @@ def takeoff():
     __logger.info("Taking off...")
     navigation.publish(MQTT.PUBLISH_CHANNELS.TAKE_OFF_AND_HAND_OVER_CONTROL)
     take_off_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.TAKE_OFF_AND_HANDOVER_CONTROL)
-    check_hovering(navigation)
+    check(navigation, MQTT.PHYSICAL.HOVERING)
     if take_off_message["status"] == "Accepted":
         return True
 
@@ -61,6 +61,9 @@ def takeoff():
 def land():
     navigation.publish(MQTT.PUBLISH_CHANNELS.emergencyLanding)
     land_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.emergencyLanding)
+    check(navigation,MQTT.PHYSICAL.HOVERING)
+    check(navigation, MQTT.PHYSICAL.ONGROUND)
+    print(land_message)
     if land_message["status"] == "Accepted":
         return True
 
@@ -69,7 +72,7 @@ def move(x, y, z):
     location = get_position(x, y, z)
     navigation.publish(MQTT.PUBLISH_CHANNELS.MOVE_TO_POINT, location)
     move_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.MOVE_TO_POINT)
-    if move_message["status"] == "Accepted" and check_hovering(navigation):
+    if move_message["status"] == "Accepted" and check(navigation, "HOVERING"):
         # TODO: Check whether check_hovering works
         return True
 
@@ -93,10 +96,10 @@ def check_exists_or_create(folder):
     os.makedirs(folder)
 
 
-def check_hovering(navigation):
+def check(navigation, physical_state):
     message_01 = navigation.subscribe(
         MQTT.SUBSCRIBE_CHANNELS.PHYSICAL)  # Monitor drone state using Physical Endpoint
-    while message_01["status"] != "HOVERING":  # Check for HOVERING status which indicates the command completion
-        __logger.debug("In state:{0}".format(message_01["status"]))
-        message_01 = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.PHYSICAL)
+    while message_01["status"] != physical_state:  # Check for HOVERING status which indicates the command completion
+            __logger.debug("In state:{0}".format(message_01["status"]))
+            message_01 = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.PHYSICAL)
 # endregion
