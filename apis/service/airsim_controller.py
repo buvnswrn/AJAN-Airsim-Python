@@ -67,7 +67,7 @@ def move(x, y, z, v):
 
 def captureImage(foldername):
     logging.info("Capturing image...")
-    filename = foldername + "captured_image" + time.strftime("%Y%m%d-%H%M%S") + ".png"
+    filename = foldername + "captured_sim_image_" + time.strftime("%Y%m%d-%H%M%S") + ".png"
     image = client.simGetImage(str(0), airsim.ImageType.Scene)
     img_array = cv2.imdecode(airsim.string_to_uint8_array(image), cv2.IMREAD_UNCHANGED)
     cv2.imwrite(filename, img_array)
