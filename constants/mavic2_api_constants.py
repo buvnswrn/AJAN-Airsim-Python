@@ -60,3 +60,11 @@ class MQTT:
         emergencyLanding = COMMAND + "emergencyLanding" + REQ
         setPIDGains = COMMAND + "setPIDGains" + REQ
 
+    class PHYSICAL:
+        HOVERING = "HOVERING"
+        ONGROUND = "ONGROUND"
+        TAKINGOFF = "TAKINGOFF"
+        MOVING = "MOVING"
+        LANDING = "LANDING"
+
+
