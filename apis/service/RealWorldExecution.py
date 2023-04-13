@@ -55,6 +55,11 @@ def get_position(x: float, y: float, z: float = 2.3, rot: float = 0, pitch: floa
         "pitch": bound(-90, 30, pitch)
     }
 
+def get_known_position(position):
+    return {
+        "position": position
+    }
+
 
 def takeoff():
     __logger.info("Taking off...")
@@ -68,7 +73,7 @@ def takeoff():
 def land():
     navigation.publish(MQTT.PUBLISH_CHANNELS.emergencyLanding)
     land_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.emergencyLanding)
-    check(navigation,MQTT.PHYSICAL.HOVERING)
+    check(navigation, MQTT.PHYSICAL.HOVERING)
     check(navigation, MQTT.PHYSICAL.ONGROUND)
     print(land_message)
     if land_message["status"] == "Accepted":
@@ -84,6 +89,14 @@ def move(x, y, z):
         return True
 
 
+def move_to_known_position(object_of_interest):
+    position = get_known_position(object_of_interest)
+    navigation.publish(MQTT.PUBLISH_CHANNELS.MOVE_TO_KNOWN_POSITION, position)
+    move_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.MOVE_TO_KNOWN_POSITION)
+    if move_message["status"] == "Accepted" and check(navigation, "HOVERING"):
+        return True
+
+
 def capture_image(capture_folder):
     check_exists_or_create(capture_folder)
     __logger.info("Capturing image...")
@@ -94,6 +107,19 @@ def capture_image(capture_folder):
         cv2.imwrite(filename, img)
     except:
         __logger.debug("Cannot save Image")
+
+
+def get_objects(object_of_interest):
+    __logger.info("Getting objects...")
+    try:
+        if object_of_interest is not None:
+            response = requests.get(MQTT.KNOWN_POSITION_URL + "/" + object_of_interest)
+        else:
+            response = requests.get(MQTT.KNOWN_POSITION_URL)
+        # return response.json()
+        return response
+    except:
+        __logger.debug("Cannot get objects")
 
 
 # region Helper Functions
@@ -107,6 +133,6 @@ def check(navigation, physical_state):
     message_01 = navigation.subscribe(
         MQTT.SUBSCRIBE_CHANNELS.PHYSICAL)  # Monitor drone state using Physical Endpoint
     while message_01["status"] != physical_state:  # Check for HOVERING status which indicates the command completion
-            __logger.debug("In state:{0}".format(message_01["status"]))
-            message_01 = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.PHYSICAL)
+        __logger.debug("In state:{0}".format(message_01["status"]))
+        message_01 = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.PHYSICAL)
 # endregion
