@@ -6,6 +6,7 @@ class MQTT:
     WEBSOCKET_PORT = 8083
     DRONE_MODEL: str = "Mavic2"
     LIVE_IMAGE_URL = "http://pixel1.mrk40.dfki.lan:8080/image.jpg"
+    KNOWN_POSITION_URL = "http://hybrit-lnv-1.mrk40.dfki.lan:3000/knownPosition/mavic2"
     class SUBSCRIBE_CHANNELS:
         DRONE_MODEL: str = "Mavic2"
         STATE: str = DRONE_MODEL+"/state/"
