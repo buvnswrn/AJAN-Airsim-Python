@@ -1,3 +1,5 @@
+import configparser
+
 import cv2
 from flask_restx import Namespace, Resource
 from flask import request, Response
@@ -5,13 +7,15 @@ import airsim
 import logging
 from constants import constants
 from .service import airsim_controller
+from Configuration import global_config
 
 airsim_controller_ns = Namespace('airsim_controller', description="Airsim Controller")
 airsim_controller_ns.logger.setLevel(constants.LOG_LEVEL)
 airsim_controller_ns.logger.info("Starting Airsim Controller")
 airsim_controller.set_logger(airsim_controller_ns.logger)
 
-airsim_controller.initialize()
+if global_config['DEFAULT'].getboolean('enableAirsim'):
+    airsim_controller.initialize()
 
 @airsim_controller_ns.route('/takeoff')
 @airsim_controller_ns.doc(description="Takeoff the drone")

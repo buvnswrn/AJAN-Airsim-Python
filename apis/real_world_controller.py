@@ -1,6 +1,9 @@
+import configparser
+
 from flask_restx import Namespace, Resource, fields
 from flask import request, Response
 
+from Configuration import global_config
 from constants import constants
 from .service import RealWorldExecution
 
@@ -19,7 +22,8 @@ get_object_data_format = realworld_controller_ns.model('GetObjectDataFormat', {
     "objectOfInterest": fields.String(required=True, description="Object of interest")
 })
 
-RealWorldExecution.initialize()
+if global_config['DEFAULT'].getboolean('enableRealWorldExecution'):
+    RealWorldExecution.initialize()
 
 
 @realworld_controller_ns.route('/takeoff')
