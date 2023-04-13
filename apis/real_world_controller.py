@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from flask import request, Response
 
 from constants import constants
@@ -8,6 +8,15 @@ realworld_controller_ns = Namespace('real_world_controller', description="Real w
 realworld_controller_ns.logger.setLevel(constants.LOG_LEVEL)
 realworld_controller_ns.logger.info("Starting Realworld Controller")
 RealWorldExecution.set_logger(realworld_controller_ns.logger)
+
+
+coordinates_data_format = realworld_controller_ns.model("Coordinates", {
+    "x": fields.Float(required=True, description="value of x coordinate"),
+    "y": fields.Float(required=True, description="value of y coordinate"),
+    "z": fields.Float(required=True, description="value of z coordinate"),
+})
+
+RealWorldExecution.initialize()
 
 
 @realworld_controller_ns.route('/takeoff')
@@ -27,6 +36,7 @@ class Land(Resource):
         RealWorldExecution.land()
         return Response(status=200)
 
+
 # @realworld_controller_ns.route('/hover')
 # @realworld_controller_ns.doc(description="Hover the drone")
 # class Hover(Resource):
@@ -37,10 +47,12 @@ class Land(Resource):
 
 @realworld_controller_ns.route('/move')
 @realworld_controller_ns.doc(description="Move the drone")
+@realworld_controller_ns.expect(coordinates_data_format)
 class Move(Resource):
     @realworld_controller_ns.doc(description="Move the drone")
     def post(self):
         RealWorldExecution.move(request.json['x'], request.json['y'], request.json['z'])
+        # RealWorldExecution.move(1.6, 0.7, 2.3)
         return Response(status=200)
 
 
@@ -51,6 +63,3 @@ class CaptureImage(Resource):
     def post(self):
         RealWorldExecution.capture_image(constants.CAPTURE_FOLDER)
         return Response(status=200)
-
-
-
