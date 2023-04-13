@@ -3,6 +3,7 @@ from flask import Response, request
 from .service import AJANPlugin, airsim_controller, UnityService, RealWorldExecution
 from constants import constants
 from multiprocessing import Process
+from .service.helper import graph
 import logging
 import sys
 
@@ -14,9 +15,9 @@ ajan_plugin_ns.logger.info("Starting AJAN Service")
 # logging.getLogger().addHandler(logging.StreamHandler())
 
 # region Models
-rdf_model = ajan_plugin_ns.model("RDFModel", {
-    'rdf_data': fields.String(required=True, description="The RDF Data model as a string")
-})
+# rdf_model = ajan_plugin_ns.model("RDFModel", {
+#     'rdf_data': fields.String(required=True, description="The RDF Data model as a string")
+# })
 
 
 # endregion
@@ -24,7 +25,6 @@ airsim_controller.initialize()
 
 
 @ajan_plugin_ns.route('/execute_actions')
-@ajan_plugin_ns.expect(rdf_model)
 @ajan_plugin_ns.doc(description="Execute actions from RDF Input")
 class ExecuteActions(Resource):
     @ajan_plugin_ns.doc(description="Execute actions from RDF Input")
@@ -35,6 +35,42 @@ class ExecuteActions(Resource):
         for key in actions_array:
             execute_actions(actions_array[key])
         return Response(status=200)
+
+
+def create_and_update_graph(actions_array):
+    # {0: [['take-off($mavic2, $launchpad_507730);', 'land($mavic2, $shelf_511466);']]}
+    # ['take-off($mavic2, $launchpad_507730);', 'land($mavic2, $shelf_511466);']
+    for key in actions_array:
+        action_dict = dict()
+        actions_array = actions_array[key]
+        for actions in actions_array:
+            for action in actions:
+                arguments = dict()
+                action = action.strip(';')
+                action, args = action.split("(")
+                agent, location = args.split(",")
+                agent = agent.strip("$")
+                location = location.strip(" ").strip("$").strip(")")
+                arguments['actor'] = agent
+                # arguments['location'] = location
+                action_dict[action] = arguments
+        ajan_plugin_ns.logger.debug("actions:" + str(action_dict))
+        _, bt = graph.process(action_dict)
+        # TODO: Update the behavior tree in the repository
+        ajan_plugin_ns.logger.debug("Behavior Tree: " + str(bt))
+    return True
+
+
+@ajan_plugin_ns.route('/create-behaviour-trees')
+@ajan_plugin_ns.doc(description="Create behaviour trees from the RDF Data")
+class CreateBehaviourTrees(Resource):
+    @ajan_plugin_ns.doc(description="Create Behaviour trees from the RDF Input")
+    def post(self):
+        data = str(request.data.decode('utf-8'))
+        actions_array = AJANPlugin.parse_and_get_actions(data, constants.RDF_FORMAT)
+        # create_and_update_graph(actions_array)
+        return Response(status=200) if create_and_update_graph(actions_array) else Response(status=420)
+
 
 
 def execute_actions(actions_array):
