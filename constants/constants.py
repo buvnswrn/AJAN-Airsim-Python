@@ -18,3 +18,6 @@ headers = {'Content-Type': 'application/json'}
 
 
 LOG_LEVEL = logging.DEBUG
+
+# AJAN
+RDF_FORMAT = "turtle"
