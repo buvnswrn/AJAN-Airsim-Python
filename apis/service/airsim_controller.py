@@ -9,12 +9,17 @@ from .UnityService import get_navmesh_path
 import sys
 
 # logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+client: airsim.MultirotorClient = None
+_logger = None
 
-client: airsim.MultirotorClient = airsim.MultirotorClient()
-client.confirmConnection()
-client.enableApiControl(True)
 
-_logger = logging.getLogger(__name__)
+def initialize():
+    global client
+    global _logger
+    client = airsim.MultirotorClient()
+    client.confirmConnection()
+    client.enableApiControl(True)
+    _logger = logging.getLogger(__name__)
 
 
 def set_logger(logger):

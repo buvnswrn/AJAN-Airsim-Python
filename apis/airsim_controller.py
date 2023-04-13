@@ -11,6 +11,7 @@ airsim_controller_ns.logger.setLevel(constants.LOG_LEVEL)
 airsim_controller_ns.logger.info("Starting Airsim Controller")
 airsim_controller.set_logger(airsim_controller_ns.logger)
 
+airsim_controller.initialize()
 
 @airsim_controller_ns.route('/takeoff')
 @airsim_controller_ns.doc(description="Takeoff the drone")

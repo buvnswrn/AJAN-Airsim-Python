@@ -20,6 +20,7 @@ rdf_model = ajan_plugin_ns.model("RDFModel", {
 
 
 # endregion
+airsim_controller.initialize()
 
 
 @ajan_plugin_ns.route('/execute_actions')
@@ -29,7 +30,7 @@ class ExecuteActions(Resource):
     @ajan_plugin_ns.doc(description="Execute actions from RDF Input")
     def post(self):
         data = str(request.data.decode('utf-8'))
-        actions_array = AJANPlugin.parse_and_get_actions(data, "turtle")
+        actions_array = AJANPlugin.parse_and_get_actions(data, constants.RDF_FORMAT)
         ajan_plugin_ns.logger.debug(actions_array)
         for key in actions_array:
             execute_actions(actions_array[key])

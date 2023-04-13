@@ -19,9 +19,11 @@ __logger = logging.getLogger(__name__)
 
 known_position = {"position": "Drone-Home"}
 
+
 def set_logger(logger):
     global __logger
     __logger = logger
+
 
 def get_navigation():
     global __navigation
@@ -30,7 +32,12 @@ def get_navigation():
     return __navigation
 
 
-navigation = get_navigation()
+navigation = None
+
+
+def initialize():
+    global navigation
+    navigation = get_navigation()
 
 
 def bound(low, high, value):
