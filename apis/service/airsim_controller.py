@@ -6,17 +6,20 @@ import airsim
 import logging
 from .helper import coordinates as c
 from .UnityService import get_navmesh_path
+from Configuration import global_config
 import sys
 
 # logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 client: airsim.MultirotorClient = None
 _logger = None
-
+airsim_config = global_config['AIRSIM']
 
 def initialize():
     global client
     global _logger
-    client = airsim.MultirotorClient()
+    print("Initializing Airsim Controller at:"+airsim_config['ip']+":"+airsim_config['port'])
+    client = airsim.MultirotorClient(ip=airsim_config['ip'], port=airsim_config.getint('port'))
+    # client = airsim.MultirotorClient()
     client.confirmConnection()
     client.enableApiControl(True)
     _logger = logging.getLogger(__name__)
