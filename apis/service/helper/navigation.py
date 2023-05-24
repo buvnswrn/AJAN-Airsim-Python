@@ -82,7 +82,9 @@ class Navigation:
         print("Publishing to:" + channel)
         return self.__mqtt_client.publish(channel)
 
-    def publish(self, channel, message={}):
+    def publish(self, channel, message=None):
+        if message is None:
+            message = {}
         print("Publishing to:" + channel+" with payload: "+str(message))
         auth = {'username': USERNAME, 'password': PASSWORD}
         return mqtt_publish.single(channel, hostname=MQTT.DOMAIN, payload=str(message), auth=auth)
