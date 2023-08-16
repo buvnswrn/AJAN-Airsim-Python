@@ -1,0 +1,3 @@
+rospy==1.16.0
+fastapi==0.97.0
+rosservice==1.16.0
