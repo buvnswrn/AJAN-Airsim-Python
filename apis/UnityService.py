@@ -42,6 +42,16 @@ class GetObjects(Resource):
         return response
 
 
+@unity_service_ns.route('/get-visible-objects')
+@unity_service_ns.doc(description="Get Objects and their positions that are infront of the drone")
+class GetVisibleObjects(Resource):
+    @unity_service_ns.expect(get_object_data_format)
+    def post(self):
+        name = request.json['objectOfInterest']
+        response = UnityService.get_visible_objects(name)
+        return response
+
+
 @unity_service_ns.route('/get-navmesh-path')
 @unity_service_ns.doc(description="Get Navmesh Path from Unity")
 class GetNavmeshPath(Resource):
