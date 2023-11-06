@@ -14,10 +14,11 @@ client: airsim.MultirotorClient = None
 _logger = None
 airsim_config = global_config['AIRSIM']
 
+
 def initialize():
     global client
     global _logger
-    print("Initializing Airsim Controller at:"+airsim_config['ip']+":"+airsim_config['port'])
+    print("Initializing Airsim Controller at:" + airsim_config['ip'] + ":" + airsim_config['port'])
     client = airsim.MultirotorClient(ip=airsim_config['ip'], port=airsim_config.getint('port'))
     # client = airsim.MultirotorClient()
     client.confirmConnection()
@@ -49,7 +50,7 @@ def hover():
 
 
 def move(x, y, z, v):
-    _logger.info("Moving to:"+str(x)+","+str(y)+","+str(z)+"in velocity:"+str(v))
+    _logger.info("Moving to:" + str(x) + "," + str(y) + "," + str(z) + "in velocity:" + str(v))
     current_position = client.simGetVehiclePose().position
     curr_x, curr_y, curr_z = c.get_unity_values(current_position.x_val, current_position.y_val, current_position.z_val)
     navmesh_response = get_navmesh_path(curr_x, curr_y, curr_z, x, y, z)
@@ -68,10 +69,28 @@ def move(x, y, z, v):
                                 x) + "," + str(y) + "," + str(z))
     for waypoint in waypoints[1:]:
         x, y, z = c.get_airsim_values(waypoint['x'], waypoint['y'], waypoint['z'])
-    # x, y, z = c.get_airsim_values(x, y, z)
+        # x, y, z = c.get_airsim_values(x, y, z)
         client.moveToPositionAsync(x, y, z, v).join()
     return True
 
+
+def move_one_step(direction):
+    pos = client.simGetVehiclePose().position
+    x = pos.x_val
+    y = pos.y_val
+    z = pos.z_val
+    if direction == 'left':
+        y -= 1
+    if direction == 'right':
+        y += 1
+    x += 1
+    client.moveToPositionAsync(x, y, z, 1).join()
+    return True
+
+
+def get_current_position():
+    pos = client.simGetVehiclePose().position
+    return {"x": pos.x_val, "y": pos.y_val, "z": pos.z_val}
 
 def captureImage(foldername):
     logging.info("Capturing image...")

@@ -1,8 +1,8 @@
 import configparser
 
 import cv2
-from flask_restx import Namespace, Resource
-from flask import request, Response
+from flask_restx import Namespace, Resource, fields
+from flask import request, Response, jsonify
 import airsim
 import logging
 from constants import constants
@@ -16,6 +16,11 @@ airsim_controller.set_logger(airsim_controller_ns.logger)
 
 if global_config['DEFAULT'].getboolean('enableAirsim'):
     airsim_controller.initialize()
+
+move_one_step_data = airsim_controller_ns.model('MoveOneStepDataFormat', {
+    "direction": fields.String(required=True, description="Direction to move one step")
+})
+
 
 @airsim_controller_ns.route('/takeoff')
 @airsim_controller_ns.doc(description="Takeoff the drone")
@@ -53,6 +58,16 @@ class Move(Resource):
         return Response(status=200)
 
 
+@airsim_controller_ns.route('/move-one-step')
+@airsim_controller_ns.doc(description="Move the drone one step forward in the given direction - left or right")
+class MoveOneStep(Resource):
+    @airsim_controller_ns.doc(description="Move the drone one step in a given direction")
+    @airsim_controller_ns.expect(move_one_step_data)
+    def post(self):
+        airsim_controller.move_one_step(request.json['direction'])
+        return Response(status=200)
+
+
 @airsim_controller_ns.route('/capture_image')
 @airsim_controller_ns.doc(description="Capture image from the drone")
 class CaptureImage(Resource):
@@ -60,3 +75,12 @@ class CaptureImage(Resource):
     def post(self):
         airsim_controller.captureImage(constants.CAPTURE_FOLDER)
         return Response(status=200)
+
+
+@airsim_controller_ns.route('/get-current-position')
+@airsim_controller_ns.doc(description="Get the current position of the drone")
+class GetCurrentPosition(Resource):
+    @airsim_controller_ns.doc(description="Get the current position of the drone")
+    def post(self):
+        response = airsim_controller.get_current_position()
+        return jsonify(response)

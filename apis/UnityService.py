@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource, fields
 from flask import Response, request
 from .service import UnityService
 import constants.constants as constants
+from .service.helper import detect_pose
 
 unity_service_ns = Namespace('Unity-service', description="Unity Service for retrieving object data and Navmesh Path "
                                                           "from Unity")
@@ -60,3 +61,11 @@ class GetNavmeshPath(Resource):
         s_x, s_y, s_z = request.json["start_position"].values()
         e_x, e_y, e_z = request.json["end_position"].values()
         return UnityService.get_navmesh_path(s_x, s_y, s_z, e_x, e_y, e_z)
+
+
+@unity_service_ns.route("/get-pose-sensor-reading")
+@unity_service_ns.doc(description="Get the image from camera and detect the pose and return the keypoints")
+class GetPoseSensorReading(Resource):
+    def post(self):
+        return detect_pose.estimate_pose()
+
