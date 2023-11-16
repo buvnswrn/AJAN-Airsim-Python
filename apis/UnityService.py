@@ -27,6 +27,10 @@ get_object_data_format = unity_service_ns.model('GetObjectDataFormat', {
     "objectOfInterest": fields.String(required=True, description="Object of interest")
 })
 
+return_type = unity_service_ns.model('ReturnType', {
+    "return_type": fields.String(required=False, description="Return type")
+})
+
 
 # endregion
 
@@ -66,6 +70,10 @@ class GetNavmeshPath(Resource):
 @unity_service_ns.route("/get-pose-sensor-reading")
 @unity_service_ns.doc(description="Get the image from camera and detect the pose and return the keypoints")
 class GetPoseSensorReading(Resource):
+    @unity_service_ns.expect(return_type)
     def post(self):
+        expected_return_type = request.json['return_type']
+        if expected_return_type is not None:
+            return detect_pose.estimate_pose(return_type=expected_return_type)
         return detect_pose.estimate_pose()
 

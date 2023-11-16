@@ -4,6 +4,8 @@ import airsim
 import cv2
 
 import numpy as np
+import pandas as pd
+import rdfpandas
 
 from ultralytics import YOLO
 
@@ -17,7 +19,7 @@ model_path = 'models/yolov8n-pose.pt'
 model: YOLO = YOLO(model_path)
 
 
-def estimate_pose(camera_name="front_center", image_type=airsim.ImageType.Scene):
+def estimate_pose(camera_name="front_center", image_type=airsim.ImageType.Scene, return_type="json"):
     if client is None:
         initialize()
     image = client.simGetImage(camera_name, image_type)
@@ -31,4 +33,9 @@ def estimate_pose(camera_name="front_center", image_type=airsim.ImageType.Scene)
     print(results[0].keypoints.xy.data)
     annotated_frame = results[0].plot()
     cv2.imshow("Airsim Pose sensor", annotated_frame)
+    if return_type == "turtle":
+        rdfdf = pd.DataFrame(results[0].keypoints.xy.numpy().squeeze(), columns=['rdf:x', 'rdf:y'])
+        rdfdf.index = ['keypoint:' + str(i) for i in range(len(rdfdf))]
+        g = rdfpandas.to_graph(rdfdf)
+        return g.serialize(format=return_type)
     return json.dumps(returnValue)
