@@ -36,12 +36,14 @@ def get_objects(name: str):
     _logger.debug("Response: " + response.text.__str__())
     return response.text
 
+
 def get_visible_objects(object_of_interest: str):
     message = GET_OBJECTS_REQUEST_TEMPLATE.format(name=object_of_interest)
     _logger.debug(message.__str__())
     response = requests.request("POST", VISIBLE_OBJECTS_URL, headers=headers, data=message)
     _logger.debug("Response:" + response.text.__str__())
     return response.text
+
 
 def get_positions_for_symbolic_location(symbolic_location: str):
     object_name, id = symbolic_location.split("_")

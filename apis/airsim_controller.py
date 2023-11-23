@@ -68,6 +68,34 @@ class MoveOneStep(Resource):
         return Response(status=200)
 
 
+@airsim_controller_ns.route('/move-one-step-right')
+@airsim_controller_ns.doc(description="Move the drone one step forward in the right direction")
+class MoveOneStepRight(Resource):
+    @airsim_controller_ns.doc(description="Move the drone one step in right direction")
+    def post(self):
+        airsim_controller.move_one_step("right")
+        return Response(status=200)
+
+
+@airsim_controller_ns.route('/move-one-step-left')
+@airsim_controller_ns.doc(description="Move the drone one step forward in the left direction")
+class MoveOneStepLeft(Resource):
+    @airsim_controller_ns.doc(description="Move the drone one step in left direction")
+    def post(self):
+        airsim_controller.move_one_step("left")
+        return Response(status=200)
+
+
+@airsim_controller_ns.route('/perceive')
+@airsim_controller_ns.doc(description="Dummy Perceive Method")
+class Perceive(Resource):
+    @airsim_controller_ns.doc(description="Dummy Perceive Method")
+    def post(self):
+        print("Perceiving")
+        return Response(status=200)
+
+
+
 @airsim_controller_ns.route('/capture_image')
 @airsim_controller_ns.doc(description="Capture image from the drone")
 class CaptureImage(Resource):
