@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from flask import Response, request
+from flask import Response, request, make_response
 from .service import UnityService
 import constants.constants as constants
 from .service.helper import detect_pose
@@ -73,7 +73,9 @@ class GetPoseSensorReading(Resource):
     @unity_service_ns.expect(return_type)
     def post(self):
         expected_return_type = request.json['return_type']
+        id = request.json['id']
         if expected_return_type is not None:
-            return detect_pose.estimate_pose(return_type=expected_return_type)
-        return detect_pose.estimate_pose()
-
+            response = make_response(detect_pose.estimate_pose(id=id, return_type=expected_return_type))
+            response.mimetype = "text/plain"
+            return response
+        return detect_pose.estimate_pose(id=id)
