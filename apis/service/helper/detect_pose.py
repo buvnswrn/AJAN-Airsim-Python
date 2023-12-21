@@ -9,14 +9,14 @@ import rdfpandas
 from rdflib import RDF, BNode, Literal, XSD
 
 from ultralytics import YOLO
-from ..vocabulary.POMDPVocabulary import _Pose, _Type, _Pandas, _Keypoint, createIRI, keypoint_ns, _Keypoints, \
-    _CurrentObservation, _Id
+
 
 import time
 
 from scipy.spatial.transform import Rotation
 
 from ..airsim_controller import client, initialize
+from ..vocabulary.POMDPVocabulary import createIRI, _Point, _Attributes, _Observation, pomdp_ns, _Pandas, _Id, _Type
 
 model_path = 'models/yolov8n-pose.pt'
 model: YOLO = YOLO(model_path)
@@ -38,16 +38,19 @@ def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.
     cv2.imshow("Airsim Pose sensor", annotated_frame)
     if return_type == "turtle":
         rdfdf = pd.DataFrame(results[0].keypoints.xy.numpy().squeeze(), columns=['rdf:x', 'rdf:y'])
-        rdfdf.index = [ keypoint_ns[str(i)] for i in range(len(rdfdf))]
+        rdfdf.index = [createIRI(_Point, str(i)) for i in range(len(rdfdf))]
         g = rdfpandas.to_graph(rdfdf)
-        g.add((_CurrentObservation, RDF.value, _Id))
-        g.add((_Id, RDF.value, Literal(id, datatype=XSD.integer)))
+
+        attributes_node = BNode()
+        for_hash_node = BNode()
+        g.add((_Observation, _Attributes, attributes_node))
+
+        g.add((attributes_node, createIRI(pomdp_ns, "personId"), Literal(id, datatype=XSD.integer)))
+        pose_node = BNode()
+        g.add((attributes_node, createIRI(pomdp_ns, "pose"), pose_node))
+        g.add((pose_node, RDF.type, _Pandas))
         g.add((_Id, _Type, XSD.integer))
-        g.add((_CurrentObservation, RDF.value, _Pose))
-        g.add((_Pose, _Type, _Pandas))
-        keypoint_node = BNode("poseDataFrame")
-        g.add((_Pose, RDF.value, _Keypoints))
         for i in range(len(rdfdf)):
-            g.add((_Keypoints, RDF.value, keypoint_ns[str(i)]))
+            g.add((pose_node, RDF.value, createIRI(_Point, str(i))))
         return g.serialize(format=return_type)
     return json.dumps(returnValue)

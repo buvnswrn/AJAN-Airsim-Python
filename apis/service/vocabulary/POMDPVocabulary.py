@@ -11,12 +11,17 @@ _Observation = pomdp_ns["Observation"]
 _Type = pomdp_ns["type"]
 _CurrentObservation = pomdp_ns["CurrentObservation"]
 
-_Pose = pomdp_ns1["pose"]
-_Id = pomdp_ns1["id"]
-_Keypoint = pomdp_ns1["keypoint"]
-_Keypoints = pomdp_ns1["keypoints"]
+_Id = pomdp_ns["id"]
+_Name = pomdp_ns["name"]
+_Attributes = pomdp_ns["attributes"]
+
+# Datatypes
 _Pandas = pomdp_ns1["pandasDataFrame"]
+_2dVector = pomdp_ns1["2dVector"]
+_3dVector = pomdp_ns1["3dVector"]
+
+_Point = pomdp_ns1["Point"]
 
 
 def createIRI(namespace, _id):
-    return URIRef(str(namespace).replace("#", "/") + "#" + str(_id))
+    return URIRef(str(namespace).replace("#", "/") + "/_" + str(_id))
