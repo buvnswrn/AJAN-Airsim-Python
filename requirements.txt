@@ -43,3 +43,8 @@ tornado==4.5.3
 urllib3==1.26.14
 Werkzeug==2.2.2
 zipp==3.11.0
+
+pandas~=2.1.1
+rdfpandas~=1.1.6
+ultralytics~=8.0.199
+scipy~=1.11.3

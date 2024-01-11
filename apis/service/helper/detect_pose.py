@@ -16,7 +16,8 @@ import time
 from scipy.spatial.transform import Rotation
 
 from ..airsim_controller import client, initialize
-from ..vocabulary.POMDPVocabulary import createIRI, _Point, _Attributes, _Observation, pomdp_ns, _Pandas, _Id, _Type
+from ..vocabulary.POMDPVocabulary import createIRI, _Point, _Attributes, _Observation, pomdp_ns, _Pandas, _Id, _Type, \
+    _For_Hash
 
 model_path = 'models/yolov8n-pose.pt'
 model: YOLO = YOLO(model_path)
@@ -44,8 +45,11 @@ def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.
         attributes_node = BNode()
         for_hash_node = BNode()
         g.add((_Observation, _Attributes, attributes_node))
+        g.add((_Observation, _For_Hash, for_hash_node))
+        g.add((for_hash_node, RDF.value, Literal("person_id")))
+        g.add((for_hash_node, RDF.value, Literal("pose")))
 
-        g.add((attributes_node, createIRI(pomdp_ns, "personId"), Literal(id, datatype=XSD.integer)))
+        g.add((attributes_node, createIRI(pomdp_ns, "person_id"), Literal(id, datatype=XSD.integer)))
         pose_node = BNode()
         g.add((attributes_node, createIRI(pomdp_ns, "pose"), pose_node))
         g.add((pose_node, RDF.type, _Pandas))

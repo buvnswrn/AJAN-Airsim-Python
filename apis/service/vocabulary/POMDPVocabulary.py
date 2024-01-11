@@ -14,6 +14,9 @@ _CurrentObservation = pomdp_ns["CurrentObservation"]
 _Id = pomdp_ns["id"]
 _Name = pomdp_ns["name"]
 _Attributes = pomdp_ns["attributes"]
+_To_Print = pomdp_ns["to_print"]
+_For_Hash = pomdp_ns["for_hash"]
+_Planned_Action = pomdp_ns["plannedAction"]
 
 # Datatypes
 _Pandas = pomdp_ns1["pandasDataFrame"]
@@ -24,4 +27,4 @@ _Point = pomdp_ns1["Point"]
 
 
 def createIRI(namespace, _id):
-    return URIRef(str(namespace).replace("#", "/") + "/_" + str(_id))
+    return URIRef(str(namespace).replace("#", "/") + "_" + str(_id))

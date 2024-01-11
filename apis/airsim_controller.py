@@ -5,9 +5,13 @@ from flask_restx import Namespace, Resource, fields
 from flask import request, Response, jsonify
 import airsim
 import logging
+
+from rdflib import Graph, RDF
+
 from constants import constants
 from .service import airsim_controller
 from Configuration import global_config
+from .service.vocabulary.POMDPVocabulary import createIRI, pomdp_ns, _Planned_Action
 
 airsim_controller_ns = Namespace('airsim_controller', description="Airsim Controller")
 airsim_controller_ns.logger.setLevel(constants.LOG_LEVEL)
@@ -64,7 +68,24 @@ class MoveOneStep(Resource):
     @airsim_controller_ns.doc(description="Move the drone one step in a given direction")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
-        airsim_controller.move_one_step(request.json['direction'])
+        direction = request.json['direction']
+        motion = request.json['motion']
+        airsim_controller.move_one_step(direction)
+        return Response(status=200)
+
+
+@airsim_controller_ns.route('/move-one-step-rdf')
+@airsim_controller_ns.doc(description="Move the drone one step forward in the given direction - left or right by "
+                                      "taking rdf input")
+class MoveOneStep(Resource):
+    @airsim_controller_ns.doc(description="Move the drone one step in a given direction")
+    @airsim_controller_ns.expect(move_one_step_data)
+    def post(self):
+        graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
+        attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
+        motion_iri = createIRI(pomdp_ns, "motion")
+        direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
+        airsim_controller.move_one_step(direction)
         return Response(status=200)
 
 
@@ -93,7 +114,6 @@ class Perceive(Resource):
     def post(self):
         print("Perceiving")
         return Response(status=200)
-
 
 
 @airsim_controller_ns.route('/capture_image')
