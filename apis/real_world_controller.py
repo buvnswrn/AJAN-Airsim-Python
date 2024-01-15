@@ -2,7 +2,8 @@ import configparser
 
 from flask_restx import Namespace, Resource, fields
 from flask import request, Response
-
+from rdflib import Graph, RDF
+from .service.vocabulary.POMDPVocabulary import _Planned_Action, createIRI, pomdp_ns
 from Configuration import global_config
 from constants import constants
 from .service import RealWorldExecution
@@ -68,6 +69,31 @@ class Move(Resource):
         return Response(status=200) \
             if RealWorldExecution.move_to_known_position(request.args.get('object_of_interest')) \
             else Response(status=400)
+
+
+@realworld_controller_ns.route('/move-one-step-rdf')
+@realworld_controller_ns.doc(description="Move the drone one step forward in the given direction - left or right by "
+                                         "receiving RDF input from AJAN service")
+class MoveOneStepRDF(Resource):
+    @realworld_controller_ns.doc(description="Move the drone one step in a given direction")
+    @realworld_controller_ns.expect(get_object_data_format)
+    def post(self):
+        graph = Graph().parse(data=request.data.decode("utf-8"), format="turtle")
+        attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
+        motion_iri = createIRI(pomdp_ns, "motion")
+        direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
+        return Response(status=200) \
+            if RealWorldExecution.turn_one_step(direction) \
+            else Response(status=400)
+
+
+@realworld_controller_ns.route('/perceive')
+@realworld_controller_ns.doc(description="Perceive the drone environment")
+class Perceive(Resource):
+    @realworld_controller_ns.doc(description="Perceive the drone environment")
+    def post(self):
+        print("Perceiving")  # Dummy perceive function
+        return Response(status=200)
 
 
 @realworld_controller_ns.route('/capture_image')

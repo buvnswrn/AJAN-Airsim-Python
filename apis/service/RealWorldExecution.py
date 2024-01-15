@@ -7,7 +7,6 @@ import requests
 from PIL import Image
 from io import BytesIO
 import cv2
-
 import constants.constants
 from apis.service.helper.navigation import Navigation
 from constants import MissionState
@@ -87,6 +86,21 @@ def move(x, y, z):
     if move_message["status"] == "Accepted" and check(navigation, "HOVERING"):
         # TODO: Check whether check_hovering works
         return True
+
+
+def turn_one_step(direction):  # not yet verified
+    if direction == 'left':
+        location = get_position(0.7, 0.7, 2.3, -90)
+    elif direction == 'right':
+        location = get_position(0.7, 0.7, 2.3, 90)
+    navigation.publish(MQTT.PUBLISH_CHANNELS.MOVE_TO_POINT, location)
+    move_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.MOVE_TO_POINT)
+    if move_message["status"] == "Accepted" and check(navigation, "HOVERING"):
+        return True
+
+
+def get_current_position():  # not yet verified
+    return navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.POSE)
 
 
 def move_to_known_position(object_of_interest):
