@@ -74,8 +74,9 @@ class GetPoseSensorReading(Resource):
     def post(self):
         expected_return_type = request.json['return_type']
         id = request.json['id']
+        write = request.json['write'] if request.json.keys().__contains__('write') else False
         if expected_return_type is not None:
-            response = make_response(detect_pose.estimate_pose(id=id, return_type=expected_return_type))
+            response = make_response(detect_pose.estimate_pose(id=id, return_type=expected_return_type, write=write))
             response.mimetype = "text/plain"
             return response
         return detect_pose.estimate_pose(id=id)

@@ -107,8 +107,9 @@ class GetObservation(Resource):
         # detect pose
         pose_id = request.json['id']
         expected_return_type = request.json['return_type']
+        write = bool(request.json['write']) if request.json.keys().__contains__('write') else True
         if expected_return_type is not None:
-            response = make_response(detect_pose.get_pose_estimation(img, pose_id, expected_return_type, True))
+            response = make_response(detect_pose.get_pose_estimation(img, pose_id, expected_return_type, write))
             response.mimetype = "text/plain"
             return response
         return detect_pose.get_pose_estimation(img, pose_id)

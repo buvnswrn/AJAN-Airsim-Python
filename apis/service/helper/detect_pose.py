@@ -23,12 +23,12 @@ model_path = 'models/yolov8n-pose.pt'
 model: YOLO = YOLO(model_path)
 
 
-def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.Scene, return_type="json"):
+def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.Scene, return_type="json", write=False):
     decoded_frame = get_sim_image(camera_name, image_type)
-    return get_pose_estimation(decoded_frame, id, return_type)
+    return get_pose_estimation(decoded_frame, id, return_type, write)
 
 
-def get_pose_estimation(decoded_frame, id, return_type="json"):
+def get_pose_estimation(decoded_frame, id, return_type="json", write=False):
     results = model.track(decoded_frame, persist=True)
     returnValue = dict()
     returnValue['class'] = results[0].names
@@ -36,6 +36,8 @@ def get_pose_estimation(decoded_frame, id, return_type="json"):
     print(results[0].names)
     print(results[0].keypoints.xy.data)
     annotated_frame = results[0].plot()
+    if write:
+        cv2.imwrite("annotated_frame.jpg", annotated_frame)
     cv2.imshow("Airsim Pose sensor", annotated_frame)
     if return_type == "turtle":
         rdfdf = pd.DataFrame(results[0].keypoints.xy.numpy().squeeze(), columns=['rdf:x', 'rdf:y'])
