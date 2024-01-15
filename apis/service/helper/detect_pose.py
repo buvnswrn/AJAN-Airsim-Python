@@ -28,7 +28,7 @@ def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.
     return get_pose_estimation(decoded_frame, id, return_type)
 
 
-def get_pose_estimation(decoded_frame, id, return_type):
+def get_pose_estimation(decoded_frame, id, return_type="json"):
     results = model.track(decoded_frame, persist=True)
     returnValue = dict()
     returnValue['class'] = results[0].names

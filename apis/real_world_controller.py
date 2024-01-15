@@ -7,6 +7,7 @@ from .service.vocabulary.POMDPVocabulary import _Planned_Action, createIRI, pomd
 from Configuration import global_config
 from constants import constants
 from .service import RealWorldExecution
+from .service.helper import detect_pose
 
 realworld_controller_ns = Namespace('real_world_controller', description="Real world Controller")
 realworld_controller_ns.logger.setLevel(constants.LOG_LEVEL)
@@ -94,6 +95,23 @@ class Perceive(Resource):
     def post(self):
         print("Perceiving")  # Dummy perceive function
         return Response(status=200)
+
+
+@realworld_controller_ns.route('/get-pose-sensor-reading')
+@realworld_controller_ns.doc(description="Get observation from the drone environment")
+class GetObservation(Resource):
+    @realworld_controller_ns.doc(description="Get observation from the drone environment")
+    def post(self):
+        # get image
+        img = RealWorldExecution.get_image()
+        # detect pose
+        pose_id = request.json['id']
+        expected_return_type = request.json['return_type']
+        if expected_return_type is not None:
+            response = detect_pose.estimate_pose(img, pose_id, expected_return_type)
+            response.mimetype = "text/plain"
+            return response
+        return detect_pose.get_pose_estimation(img, pose_id)
 
 
 @realworld_controller_ns.route('/capture_image')

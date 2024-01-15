@@ -116,11 +116,16 @@ def capture_image(capture_folder):
     __logger.info("Capturing image...")
     filename = capture_folder + "captured_world_image_" + time.strftime("%Y%m%d-%H%M%S") + constants.constants.IMAGE_EXT
     try:
-        response = requests.get(MQTT.LIVE_IMAGE_URL)
-        img = numpy.array(Image.open(BytesIO(response.content)).convert('RGB'))[:, :, ::-1].copy()
+        img = get_image()
         cv2.imwrite(filename, img)
     except:
         __logger.debug("Cannot save Image")
+
+
+def get_image():
+    response = requests.get(MQTT.LIVE_IMAGE_URL)
+    img = numpy.array(Image.open(BytesIO(response.content)).convert('RGB'))[:, :, ::-1].copy()
+    return img
 
 
 def get_objects(object_of_interest):
