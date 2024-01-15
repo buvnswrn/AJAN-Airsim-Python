@@ -24,11 +24,11 @@ model: YOLO = YOLO(model_path)
 
 
 def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.Scene, return_type="json"):
-    if client is None:
-        initialize()
-    image = client.simGetImage(camera_name, image_type)
-    np_response_image = np.asarray(bytearray(image), dtype="uint8")
-    decoded_frame = cv2.imdecode(np_response_image, cv2.IMREAD_COLOR)
+    decoded_frame = get_sim_image(camera_name, image_type)
+    return get_pose_estimation(decoded_frame, id, return_type)
+
+
+def get_pose_estimation(decoded_frame, id, return_type):
     results = model.track(decoded_frame, persist=True)
     returnValue = dict()
     returnValue['class'] = results[0].names
@@ -58,3 +58,12 @@ def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.
             g.add((pose_node, RDF.value, createIRI(_Point, str(i))))
         return g.serialize(format=return_type)
     return json.dumps(returnValue)
+
+
+def get_sim_image(camera_name, image_type):
+    if client is None:
+        initialize()
+    image = client.simGetImage(camera_name, image_type)
+    np_response_image = np.asarray(bytearray(image), dtype="uint8")
+    decoded_frame = cv2.imdecode(np_response_image, cv2.IMREAD_COLOR)
+    return decoded_frame
