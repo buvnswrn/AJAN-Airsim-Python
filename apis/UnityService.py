@@ -2,7 +2,7 @@ from flask_restx import Namespace, Resource, fields
 from flask import Response, request, make_response
 from .service import UnityService
 import constants.constants as constants
-from .service.helper import detect_pose
+from .service.helper import detect_pose, detect_objects
 
 unity_service_ns = Namespace('Unity-service', description="Unity Service for retrieving object data and Navmesh Path "
                                                           "from Unity")
@@ -80,3 +80,20 @@ class GetPoseSensorReading(Resource):
             response.mimetype = "text/plain"
             return response
         return detect_pose.estimate_pose(id=id)
+
+
+@unity_service_ns.route("/get-object-sensor-reading")
+@unity_service_ns.doc(description="Get the image from camera and detect the objects and return the bounding boxes")
+class GetObjectSensorReading(Resource):
+    @unity_service_ns.expect(return_type)
+    def post(self):
+        expected_return_type = request.json['return_type']
+        id = request.json['id']
+        write = request.json['write'] if request.json.keys().__contains__('write') else False
+        confidence_level = request.json['conf'] if request.json.keys().__contains__('conf') else 0.2
+        if expected_return_type is not None:
+            response = make_response(detect_objects.detect_objects(id=id, conf=confidence_level,
+                                                                   return_type=expected_return_type, write=write))
+            response.mimetype = "text/plain"
+            return response
+        return detect_objects.detect_objects(id)
