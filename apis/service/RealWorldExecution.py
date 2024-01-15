@@ -11,6 +11,7 @@ import constants.constants
 from apis.service.helper.navigation import Navigation
 from constants import MissionState
 from constants.mavic2_api_constants import MQTT
+from Configuration import global_config
 
 __navigation = None
 __current_state = MissionState.NOT_INITIALIZED
@@ -122,7 +123,32 @@ def capture_image(capture_folder):
         __logger.debug("Cannot save Image")
 
 
+def get_image_from_web_cam():
+    cap = cv2.VideoCapture(0)
+    cap.set(3, 640)
+    cap.set(4, 480)
+    img = None
+    capture_image = None
+    while True:
+        ret, frame = cap.read()
+        cv2.imshow('frame', frame)
+        k = cv2.waitKey(1)
+        if k % 256 == ord('q'):
+            break
+        if k % 256 == 32:
+            capture_image = time.time() + 3
+        if capture_image and time.time() > capture_image:
+            img = frame.copy()
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+    return img
+
+
 def get_image():
+    if not global_config['DEFAULT'].getboolean('enableRealWorldExecution'):
+        img = get_image_from_web_cam()
+        return img
     response = requests.get(MQTT.LIVE_IMAGE_URL)
     img = numpy.array(Image.open(BytesIO(response.content)).convert('RGB'))[:, :, ::-1].copy()
     return img
