@@ -1,7 +1,7 @@
 import configparser
 
 from flask_restx import Namespace, Resource, fields
-from flask import request, Response
+from flask import request, Response, make_response
 from rdflib import Graph, RDF
 from .service.vocabulary.POMDPVocabulary import _Planned_Action, createIRI, pomdp_ns
 from Configuration import global_config
@@ -108,7 +108,7 @@ class GetObservation(Resource):
         pose_id = request.json['id']
         expected_return_type = request.json['return_type']
         if expected_return_type is not None:
-            response = detect_pose.estimate_pose(img, pose_id, expected_return_type)
+            response = make_response(detect_pose.get_pose_estimation(img, pose_id, expected_return_type, True))
             response.mimetype = "text/plain"
             return response
         return detect_pose.get_pose_estimation(img, pose_id)
