@@ -4,6 +4,9 @@ import time
 import cv2
 import airsim
 import logging
+
+import numpy as np
+
 from .helper import coordinates as c
 from .UnityService import get_navmesh_path
 from Configuration import global_config
@@ -98,3 +101,12 @@ def captureImage(foldername):
     image = client.simGetImage(str(0), airsim.ImageType.Scene)
     img_array = cv2.imdecode(airsim.string_to_uint8_array(image), cv2.IMREAD_UNCHANGED)
     cv2.imwrite(filename, img_array)
+
+
+def get_sim_image(camera_name, image_type):
+    if client is None:
+        initialize()
+    image = client.simGetImage(camera_name, image_type)
+    np_response_image = np.asarray(bytearray(image), dtype="uint8")
+    decoded_frame = cv2.imdecode(np_response_image, cv2.IMREAD_COLOR)
+    return decoded_frame

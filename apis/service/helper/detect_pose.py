@@ -2,20 +2,12 @@ import json
 
 import airsim
 import cv2
-
-import numpy as np
 import pandas as pd
 import rdfpandas
 from rdflib import RDF, BNode, Literal, XSD
-
 from ultralytics import YOLO
 
-
-import time
-
-from scipy.spatial.transform import Rotation
-
-from ..airsim_controller import client, initialize
+from ..airsim_controller import get_sim_image
 from ..vocabulary.POMDPVocabulary import createIRI, _Point, _Attributes, _Observation, pomdp_ns, _Pandas, _Id, _Type, \
     _For_Hash
 
@@ -37,7 +29,7 @@ def get_pose_estimation(decoded_frame, id, return_type="json", write=False):
     print(results[0].keypoints.xy.data)
     annotated_frame = results[0].plot()
     if write:
-        cv2.imwrite("annotated_frame.jpg", annotated_frame)
+        cv2.imwrite("pose_annotated_frame.jpg", annotated_frame)
     cv2.imshow("Airsim Pose sensor", annotated_frame)
     if return_type == "turtle":
         rdfdf = pd.DataFrame(results[0].keypoints.xy.numpy().squeeze(), columns=['rdf:x', 'rdf:y'])
@@ -62,10 +54,4 @@ def get_pose_estimation(decoded_frame, id, return_type="json", write=False):
     return json.dumps(returnValue)
 
 
-def get_sim_image(camera_name, image_type):
-    if client is None:
-        initialize()
-    image = client.simGetImage(camera_name, image_type)
-    np_response_image = np.asarray(bytearray(image), dtype="uint8")
-    decoded_frame = cv2.imdecode(np_response_image, cv2.IMREAD_COLOR)
-    return decoded_frame
+
