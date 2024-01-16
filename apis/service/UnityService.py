@@ -1,6 +1,8 @@
 import json
 
 import requests
+from flask import jsonify
+
 from constants.constants import NAVMESH_PATH_URL, NAVMESH_REQUEST_TEMPLATE, headers, GET_OBJECTS_REQUEST_TEMPLATE, \
     OBJECTS_URL, VISIBLE_OBJECTS_URL
 from constants.object_mapping import object_name_for_symbolic_position
@@ -26,7 +28,7 @@ def get_navmesh_path(start_x: float, start_y: float, start_z: float, end_x: floa
     response = requests.request("POST", NAVMESH_PATH_URL, headers=headers,
                                 data=message)
     _logger.debug("Response: " + response.text.__str__())
-    return response.text
+    return jsonify(json.loads(response.text))
 
 
 def get_objects(name: str):
@@ -42,7 +44,7 @@ def get_visible_objects(object_of_interest: str):
     _logger.debug(message.__str__())
     response = requests.request("POST", VISIBLE_OBJECTS_URL, headers=headers, data=message)
     _logger.debug("Response:" + response.text.__str__())
-    return response.text
+    return jsonify(json.loads(response.text))
 
 
 def get_positions_for_symbolic_location(symbolic_location: str):
