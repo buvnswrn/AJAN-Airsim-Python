@@ -45,11 +45,14 @@ def get_pose_estimation(decoded_frame, id, return_type="json", write=False):
 
         g.add((attributes_node, createIRI(pomdp_ns, "person_id"), Literal(id, datatype=XSD.integer)))
         pose_node = BNode()
-        g.add((attributes_node, createIRI(pomdp_ns, "pose"), pose_node))
-        g.add((pose_node, RDF.type, _Pandas))
         g.add((_Id, _Type, XSD.integer))
-        for i in range(len(rdfdf)):
-            g.add((pose_node, RDF.value, createIRI(_Point, str(i))))
+        g.add((attributes_node, createIRI(pomdp_ns, "pose"), pose_node))
+        if(len(rdfdf)>0):
+            g.add((pose_node, RDF.type, _Pandas))
+            for i in range(len(rdfdf)):
+                g.add((pose_node, RDF.value, createIRI(_Point, str(i))))
+        else:
+            g.add((pose_node, RDF.value, RDF.nil))
         return g.serialize(format=return_type)
     return json.dumps(returnValue)
 
