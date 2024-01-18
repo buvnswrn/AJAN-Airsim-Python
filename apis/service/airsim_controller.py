@@ -91,9 +91,18 @@ def move_one_step(direction):
     return True
 
 
+def turn_one_step(direction):
+    if direction == 'left':
+        client.rotateToYawAsync(-90).join()
+    if direction == 'right':
+        client.rotateToYawAsync(90).join()
+    return True
+
+
 def get_current_position():
     pos = client.simGetVehiclePose().position
     return {"x": pos.x_val, "y": pos.y_val, "z": pos.z_val}
+
 
 def captureImage(foldername):
     logging.info("Capturing image...")

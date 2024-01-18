@@ -81,11 +81,28 @@ class MoveOneStep(Resource):
     @airsim_controller_ns.doc(description="Move the drone one step in a given direction")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
-        graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
-        attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
-        motion_iri = createIRI(pomdp_ns, "motion")
-        direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
+        direction = get_direction()
         airsim_controller.move_one_step(direction)
+        return Response(status=200)
+
+
+def get_direction():
+    graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
+    attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
+    motion_iri = createIRI(pomdp_ns, "motion")
+    direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
+    return direction
+
+
+@airsim_controller_ns.route('/turn-one-step-rdf')
+@airsim_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
+                                      "taking rdf input")
+class MoveOneStep(Resource):
+    @airsim_controller_ns.doc(description="Turn the drone one step in a given direction")
+    @airsim_controller_ns.expect(move_one_step_data)
+    def post(self):
+        direction = get_direction()
+        airsim_controller.turn_one_step(direction)
         return Response(status=200)
 
 
