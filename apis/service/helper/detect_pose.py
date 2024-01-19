@@ -23,8 +23,12 @@ def estimate_pose(id=0, camera_name="front_center", image_type=airsim.ImageType.
 def get_pose_estimation(decoded_frame, id, return_type="json", write=False):
     results = model.track(decoded_frame, persist=True)
     returnValue = dict()
+    confidence = results[0].boxes.conf[0].tolist() if len(results[0].boxes.conf) > 0 else 0
     returnValue['class'] = results[0].names
-    returnValue['keypoints'] = results[0].keypoints.xy.numpy().tolist()
+    if confidence > 0.5:
+        returnValue['keypoints'] = results[0].keypoints.xy.numpy().tolist()
+    else:
+        returnValue['keypoints'] = []
     print(results[0].names)
     print(results[0].keypoints.xy.data)
     annotated_frame = results[0].plot()
