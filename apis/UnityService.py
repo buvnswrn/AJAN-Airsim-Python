@@ -1,8 +1,11 @@
 from flask_restx import Namespace, Resource, fields
 from flask import Response, request, make_response
+from rdflib import Graph, RDF
+
 from .service import UnityService
 import constants.constants as constants
 from .service.helper import detect_pose, detect_objects
+from .service.vocabulary.POMDPVocabulary import createIRI, pomdp_ns
 
 unity_service_ns = Namespace('Unity-service', description="Unity Service for retrieving object data and Navmesh Path "
                                                           "from Unity")
@@ -24,7 +27,8 @@ navmesh_data_format = unity_service_ns.model('NavmeshDataFormat', {
 })
 
 get_object_data_format = unity_service_ns.model('GetObjectDataFormat', {
-    "objectOfInterest": fields.String(required=True, description="Object of interest")
+    "objectOfInterest": fields.String(required=True, description="Object of interest"),
+    "return_type": fields.String(required=False, description="Return Type of the object")
 })
 
 return_type = unity_service_ns.model('ReturnType', {
@@ -53,7 +57,20 @@ class GetVisibleObjects(Resource):
     @unity_service_ns.expect(get_object_data_format)
     def post(self):
         name = request.json['objectOfInterest']
-        response = UnityService.get_visible_objects(name)
+        return_type = request.json["return_type"] if request.json.keys().__contains__('return_type') else "json"
+        response = UnityService.get_visible_objects(name, return_type)
+        return make_response(response)
+
+
+@unity_service_ns.route('/get-visible-objects-rdf')
+@unity_service_ns.doc(description="Get Objects and their positions that are infront of the drone")
+class GetVisibleObjects(Resource):
+    @unity_service_ns.expect(get_object_data_format)
+    def post(self):
+        graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
+        name = str([o for s, p, o in graph.triples((createIRI(pomdp_ns, "objectOfInterest"), RDF.value, None))][0])
+        return_type = request.json["return_type"] if request.json.keys().__contains__('return_type') else "turtle"
+        response = UnityService.get_visible_objects(name, return_type)
         return response
 
 
