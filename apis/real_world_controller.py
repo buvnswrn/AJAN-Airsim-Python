@@ -33,8 +33,11 @@ if global_config['DEFAULT'].getboolean('enableRealWorldExecution'):
 class Takeoff(Resource):
     @realworld_controller_ns.doc(description="Takeoff the drone")
     def post(self):
-        RealWorldExecution.takeoff()
-        return Response(status=200)
+        success, message = RealWorldExecution.takeoff()
+        if success:
+            return Response(status=200)
+        else:
+            return Response(status=403, response=message)
 
 
 @realworld_controller_ns.route('/land')
@@ -88,6 +91,35 @@ class MoveOneStepRDF(Resource):
             else Response(status=400)
 
 
+@realworld_controller_ns.route('/turn-one-step-rdf')
+@realworld_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
+                                         "receiving RDF input from AJAN service")
+class MoveOneStepRDF(Resource):
+    @realworld_controller_ns.doc(description="Turn the drone one step in a given direction")
+    @realworld_controller_ns.expect(get_object_data_format)
+    def post(self):
+        graph = Graph().parse(data=request.data.decode("utf-8"), format="turtle")
+        attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
+        motion_iri = createIRI(pomdp_ns, "motion")
+        direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
+        return Response(status=200) \
+            if RealWorldExecution.turn_one_step(direction) \
+            else Response(status=400)
+
+
+@realworld_controller_ns.route('/turn-one-step')
+@realworld_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
+                                         "receiving RDF input from AJAN service")
+class MoveOneStepRDF(Resource):
+    @realworld_controller_ns.doc(description="Turn the drone one step in a given direction")
+    @realworld_controller_ns.expect(get_object_data_format)
+    def post(self):
+        direction = request.json['direction']
+        return Response(status=200) \
+            if RealWorldExecution.turn_one_step(direction) \
+            else Response(status=400)
+
+
 @realworld_controller_ns.route('/perceive')
 @realworld_controller_ns.doc(description="Perceive the drone environment")
 class Perceive(Resource):
@@ -101,6 +133,7 @@ class Perceive(Resource):
 @realworld_controller_ns.doc(description="Get observation from the drone environment")
 class GetObservation(Resource):
     @realworld_controller_ns.doc(description="Get observation from the drone environment")
+    @realworld_controller_ns.expect(get_object_data_format)
     def post(self):
         # get image
         img = RealWorldExecution.get_image()
@@ -121,6 +154,24 @@ class CaptureImage(Resource):
     @realworld_controller_ns.doc(description="Capture image from the drone")
     def post(self):
         RealWorldExecution.capture_image(constants.CAPTURE_FOLDER)
+        return Response(status=200)
+
+
+@realworld_controller_ns.route('/turn_live_image_on')
+@realworld_controller_ns.doc(description="Turn live image on")
+class TurnLiveImageOn(Resource):
+    @realworld_controller_ns.doc(description="Turn live image on")
+    def post(self):
+        RealWorldExecution.turn_live_image_on()
+        return Response(status=200)
+
+
+@realworld_controller_ns.route('/turn_live_image_off')
+@realworld_controller_ns.doc(description="Turn live image off")
+class TurnLiveImageOff(Resource):
+    @realworld_controller_ns.doc(description="Turn live image off")
+    def post(self):
+        RealWorldExecution.turn_live_image_off()
         return Response(status=200)
 
 
