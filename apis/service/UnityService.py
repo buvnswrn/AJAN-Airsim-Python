@@ -31,7 +31,7 @@ def get_navmesh_path(start_x: float, start_y: float, start_z: float, end_x: floa
     response = requests.request("POST", NAVMESH_PATH_URL, headers=headers,
                                 data=message)
     _logger.debug("Response: " + response.text.__str__())
-    return jsonify(json.loads(response.text))
+    return response.text
 
 
 def get_objects(name: str):
@@ -54,12 +54,14 @@ def get_visible_objects(object_of_interest: str, return_type="json"):
             instance_id = game_object["InstanceId"]
             position = game_object["Position"]  # vector3
             name = game_object["Name"]
+            isVisible = game_object["IsVisible"]
             object_node = createIRI(unity_ns, name+str(instance_id))
             g.add((object_node, RDF.type, unity_ns.GameObject))
             g.add((object_node, unity_ns.instanceId, Literal(instance_id)))
             g.add((object_node, unity_ns.name, Literal(name)))
             position_node = BNode(name+str(instance_id))
             g.add((object_node, unity_ns.position, position_node))
+            g.add((object_node, unity_ns.isVisible, Literal(isVisible)))
             g.add((position_node, RDF.type, _3dVector))
             g.add((position_node, _rdf.x, Literal(position["x"])))
             g.add((position_node, _rdf.y, Literal(position["y"])))

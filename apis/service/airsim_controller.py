@@ -1,4 +1,5 @@
 import json
+import math
 import time
 
 import cv2
@@ -52,6 +53,13 @@ def hover():
     return True
 
 
+def turn_toward_object(x, y, z, curr_x, curr_y, curr_z):
+    dx = x - curr_x
+    dy = y - curr_y
+    angle = math.atan2(dy, dx) * 180 / math.pi
+    client.rotateToYawAsync(angle).join()
+
+
 def move(x, y, z, v):
     _logger.info("Moving to:" + str(x) + "," + str(y) + "," + str(z) + "in velocity:" + str(v))
     current_position = client.simGetVehiclePose().position
@@ -71,9 +79,10 @@ def move(x, y, z, v):
                             "No path found: from" + str(curr_x) + "," + str(curr_y) + "," + str(curr_z) + " to " + str(
                                 x) + "," + str(y) + "," + str(z))
     for waypoint in waypoints[1:]:
-        x, y, z = c.get_airsim_values(waypoint['x'], waypoint['y'], waypoint['z'])
+        x, y, z = c.get_airsim_values(waypoint['x'], curr_y, waypoint['z'])
         # x, y, z = c.get_airsim_values(x, y, z)
         client.moveToPositionAsync(x, y, z, v).join()
+    turn_toward_object(x, y, z, curr_x, curr_y, curr_z)
     return True
 
 
@@ -92,10 +101,11 @@ def move_one_step(direction):
 
 
 def turn_one_step(direction):
+    print("Turning " + direction)
     if direction == 'left':
-        client.rotateToYawAsync(-90).join()
-    if direction == 'right':
         client.rotateToYawAsync(90).join()
+    if direction == 'right':
+        client.rotateToYawAsync(-90).join()
     return True
 
 

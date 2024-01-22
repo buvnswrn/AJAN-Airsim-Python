@@ -5,6 +5,8 @@ from flask_restx import Namespace, Resource, fields
 from flask import request, Response, jsonify
 import airsim
 import logging
+from apis.service.vocabulary.UnityVocabulary import unity_ns
+from apis.service.vocabulary.POMDPVocabulary import _rdf
 
 from rdflib import Graph, RDF
 
@@ -62,6 +64,23 @@ class Move(Resource):
         return Response(status=200)
 
 
+@airsim_controller_ns.route('/move-rdf')
+@airsim_controller_ns.doc(description="Move the drone")
+class Move(Resource):
+    @airsim_controller_ns.doc(description="Move the drone")
+    @airsim_controller_ns.expect(move_one_step_data)
+    def post(self):
+        if request.content_type == "application/json":
+            airsim_controller.move(request.json['x'], request.json['y'], request.json['z'], request.json['v'])
+        elif request.content_type == "text/turtle":
+            graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
+            x_node = [float(o) for s, p, o in graph.triples((unity_ns.position, _rdf["x"], None))][0]
+            y_node = [float(o) for s, p, o in graph.triples((unity_ns.position, _rdf["y"], None))][0]
+            z_node = [float(o) for s, p, o in graph.triples((unity_ns.position, _rdf["z"], None))][0]
+            airsim_controller.move(x_node, y_node, z_node, 1)
+        return Response(status=200)
+
+
 @airsim_controller_ns.route('/move-one-step')
 @airsim_controller_ns.doc(description="Move the drone one step forward in the given direction - left or right")
 class MoveOneStep(Resource):
@@ -102,6 +121,18 @@ class MoveOneStep(Resource):
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
         direction = get_direction()
+        airsim_controller.turn_one_step(direction)
+        return Response(status=200)
+
+
+@airsim_controller_ns.route('/turn-one-step')
+@airsim_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
+                                      "taking rdf input")
+class MoveOneStep(Resource):
+    @airsim_controller_ns.doc(description="Turn the drone one step in a given direction")
+    @airsim_controller_ns.expect(move_one_step_data)
+    def post(self):
+        direction = request.json['direction']
         airsim_controller.turn_one_step(direction)
         return Response(status=200)
 

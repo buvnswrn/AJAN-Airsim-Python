@@ -68,9 +68,10 @@ class GetVisibleObjects(Resource):
     @unity_service_ns.expect(get_object_data_format)
     def post(self):
         graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
-        name = str([o for s, p, o in graph.triples((createIRI(pomdp_ns, "objectOfInterest"), RDF.value, None))][0])
-        return_type = request.json["return_type"] if request.json.keys().__contains__('return_type') else "turtle"
-        response = UnityService.get_visible_objects(name, return_type)
+        name = str([o for s, p, o in graph.triples((pomdp_ns["objectOfInterest"], RDF.value, None))][0])
+        objects_turtle = UnityService.get_visible_objects(name, "turtle")
+        response = make_response(objects_turtle)
+        response.headers['Content-Type'] = 'text/turtle'
         return response
 
 
