@@ -24,6 +24,7 @@ _Pandas = pomdp_ns1["pandasDataFrame"]
 _2dVector = pomdp_ns1["2dVector"]
 _3dVector = pomdp_ns1["3dVector"]
 _4dVector = pomdp_ns1["4dVector"]
+_Vector = pomdp_ns1["Vector"]
 
 _Point = pomdp_ns1["Point"]
 

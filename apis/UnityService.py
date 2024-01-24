@@ -108,7 +108,7 @@ class GetObjectSensorReading(Resource):
         expected_return_type = request.json['return_type']
         id = request.json['id']
         write = request.json['write'] if request.json.keys().__contains__('write') else False
-        confidence_level = request.json['conf'] if request.json.keys().__contains__('conf') else 0.2
+        confidence_level = request.json['conf'] if request.json.keys().__contains__('conf') else 0.3
         if expected_return_type is not None:
             response = make_response(detect_objects.detect_objects(id=id, conf=confidence_level,
                                                                    return_type=expected_return_type, write=write))
