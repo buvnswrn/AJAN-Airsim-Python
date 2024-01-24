@@ -35,6 +35,7 @@ def get_object_detection(decoded_frame, id, conf=0.2, return_type="json", write=
     annotated_frame = results.plot()
     if write:
         cv2.imwrite("object_annotated_frame.jpg", annotated_frame)
+        cv2.imwrite("object_frame.jpg", decoded_frame)
     cv2.imshow("Object sensor", annotated_frame)
     if return_type == "turtle":
         g = Graph()

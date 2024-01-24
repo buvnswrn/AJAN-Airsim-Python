@@ -104,9 +104,9 @@ def move_one_step(direction):
     if direction == 'backward':
         x -= 1
     if direction == 'up':
-        z += 1
-    if direction == 'down':
         z -= 1
+    if direction == 'down':
+        z += 1
     client.moveToPositionAsync(x, y, z, 1).join()
     return True
 
