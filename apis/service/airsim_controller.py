@@ -56,8 +56,11 @@ def hover():
 def turn_toward_object(x, y, z, curr_x, curr_y, curr_z):
     dx = x - curr_x
     dy = y - curr_y
-    angle = math.atan2(dy, dx) * 180 / math.pi
-    client.rotateToYawAsync(angle).join()
+    # angle = math.atan2(dy, dx) * 180 / math.pi
+    angle = math.atan2(dy, dx)
+    angle_degrees = math.degrees(angle)
+    # angle_degrees = (angle_degrees + 180) % 360 - 180
+    client.rotateToYawAsync(angle_degrees).join()
 
 
 def move(x, y, z, v):
@@ -82,6 +85,7 @@ def move(x, y, z, v):
         x, y, z = c.get_airsim_values(waypoint['x'], curr_y, waypoint['z'])
         # x, y, z = c.get_airsim_values(x, y, z)
         client.moveToPositionAsync(x, y, z, v).join()
+    client.moveToPositionAsync(x, y-1, z, v).join()
     turn_toward_object(x, y, z, curr_x, curr_y, curr_z)
     return True
 
