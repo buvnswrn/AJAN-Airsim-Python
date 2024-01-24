@@ -88,7 +88,6 @@ class MoveOneStep(Resource):
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
         direction = request.json['direction']
-        motion = request.json['motion']
         airsim_controller.move_one_step(direction)
         return Response(status=200)
 
