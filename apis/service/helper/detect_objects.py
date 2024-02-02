@@ -44,7 +44,8 @@ def get_object_detection(decoded_frame, id, conf=0.3, return_type="json", write=
         for_hash_node = BNode()
         g.add((_Observation, _Attributes, attributes_node))
         g.add((_Observation, _For_Hash, for_hash_node))
-        g.add((for_hash_node, _Point, Literal("object_id")))
+        g.add((for_hash_node, RDF.value, Literal("object_id")))
+        g.add((for_hash_node, RDF.value, Literal("objects")))
 
         g.add((attributes_node, createIRI(pomdp_ns, "object_id"), Literal(id)))
         objects_node = createIRI(pomdp_ns, "objects")

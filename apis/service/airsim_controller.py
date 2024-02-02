@@ -25,6 +25,7 @@ def initialize():
     print("Initializing Airsim Controller at:" + airsim_config['ip'] + ":" + airsim_config['port'])
     client = airsim.MultirotorClient(ip=airsim_config['ip'], port=airsim_config.getint('port'))
     # client = airsim.MultirotorClient()
+
     client.confirmConnection()
     client.enableApiControl(True)
     _logger = logging.getLogger(__name__)
@@ -85,12 +86,13 @@ def move(x, y, z, v):
         x, y, z = c.get_airsim_values(waypoint['x'], curr_y, waypoint['z'])
         # x, y, z = c.get_airsim_values(x, y, z)
         client.moveToPositionAsync(x, y, z, v).join()
-    client.moveToPositionAsync(x, y-1, z, v).join()
+    client.moveToPositionAsync(x, y - 1, z, v).join()
     turn_toward_object(x, y, z, curr_x, curr_y, curr_z)
     return True
 
 
 def move_one_step(direction):
+    print("Moving " + direction)
     pos = client.simGetVehiclePose().position
     x = pos.x_val
     y = pos.y_val
@@ -107,8 +109,34 @@ def move_one_step(direction):
         z -= 1
     if direction == 'down':
         z += 1
-    client.moveToPositionAsync(x, y, z, 1).join()
+    if -4.1 < z < -0.612:
+        client.moveToPositionAsync(x, y, z, 1).join()
+    else:
+        z = max(-4.1, min(z, -0.612))  # -4.1 is the max y value and -0.612 is the min y value allowed
+        # z = max(0.612, min(z, 4.1))  # 4.1 is the max y value and 0.612 is the min y value allowed
+        client.moveToPositionAsync(x, y, z, 1).join()
     return True
+
+
+def check_if_end_position_reached(x, y, z):
+    """
+    Check if the end position is reached
+    :param x:
+    :param y:
+    :param z:
+    :return:
+    """
+    end_pos = client.simGetVehiclePose().position
+    diff_x = end_pos.x_val - x
+    diff_y = end_pos.y_val - y
+    diff_z = end_pos.z_val - z
+    if diff_x <= 0.2 and diff_y <= 0.2 and diff_z <= 0.2:
+        return True
+    else:
+        client.moveToPositionAsync(x + diff_x if diff_x > 0.2 else x,
+                                   y + diff_y if diff_y > 0.2 else y,
+                                   z + diff_z if diff_z > 0.2 else z, 1).join()
+        check_if_end_position_reached(x, y, z)
 
 
 def turn_one_step(direction):
