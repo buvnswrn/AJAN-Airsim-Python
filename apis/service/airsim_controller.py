@@ -110,12 +110,20 @@ def move_one_step(direction):
     if direction == 'down':
         z += 1
     if -4.1 < z < -0.612:
-        client.moveToPositionAsync(x, y, z, 1).join()
+        move_safer(direction, x, y, z)
     else:
         z = max(-4.1, min(z, -0.612))  # -4.1 is the max y value and -0.612 is the min y value allowed
         # z = max(0.612, min(z, 4.1))  # 4.1 is the max y value and 0.612 is the min y value allowed
-        client.moveToPositionAsync(x, y, z, 1).join()
+        move_safer(direction, x, y, z)
     return True
+
+
+def move_safer(direction, x, y, z):
+    if direction != "down":
+        client.moveToPositionAsync(x, y, z, 1).join()
+    else:
+        client.moveToPositionAsync(x, y, z, 1)
+        time.sleep(2)
 
 
 def check_if_end_position_reached(x, y, z):
