@@ -1,4 +1,5 @@
 import json
+import statistics
 
 import airsim
 import cv2
@@ -6,9 +7,8 @@ from rdflib import BNode, Graph, Literal, RDF
 from ultralytics import YOLO
 
 from apis.service.airsim_controller import get_sim_image
-from ..vocabulary.POMDPVocabulary import createIRI, _Point, _Attributes, _Observation, pomdp_ns, _Pandas, _Id, _Type, \
-    _For_Hash, _4dVector, _Probability, _rdf, _Vector
-from ..vocabulary.UnityVocabulary import unity_ns
+from ..vocabulary.POMDPVocabulary import createIRI, _Attributes, _Observation, pomdp_ns, _For_Hash, _4dVector, _rdf, \
+    _Vector
 
 model_path = 'models/custom_object_detection.pt'
 model: YOLO = YOLO(model_path)
@@ -52,13 +52,14 @@ def get_object_detection(decoded_frame, id, conf=0.3, return_type="json", write=
         objects_value_node = BNode()
         g.add((attributes_node, objects_node, objects_value_node))
         g.add((objects_value_node, RDF.type, _Vector))
+        probabilities = []
         for object_name in returnValue.keys():
-            object_relation_node = unity_ns[object_name]
+            object_relation_node = createIRI(pomdp_ns, object_name)  # http://www.dfki.de/pomdp-ns/_Box_1
 
-            g.add((objects_value_node, RDF.value, object_relation_node))
+            g.add((objects_value_node, RDF.value, Literal(object_name)))  # Box_1
 
             object_node = BNode(object_name)
-            g.add((attributes_node, object_relation_node, object_node))  # TODO: check if deleted in pomdp_py.
+            g.add((attributes_node, object_relation_node, object_node))
             object_location = returnValue[object_name]["location"]
 
             g.add((object_node, RDF.type, _4dVector))
@@ -68,8 +69,13 @@ def get_object_detection(decoded_frame, id, conf=0.3, return_type="json", write=
             g.add((object_node, _rdf.h, Literal(object_location[3])))
 
             object_probability = returnValue[object_name]["probability"]
-            probability_node = createIRI(unity_ns, object_name + "_" + "probability")  # Check if this can be accessed.
+            probabilities.append(object_probability)
+            probability_node = createIRI(pomdp_ns, object_name + "_" + "probability")  # Check if this can be accessed.
             g.add((attributes_node, probability_node, Literal(object_probability)))
+
+        g.add((attributes_node, createIRI(pomdp_ns, "average_probability"),
+               Literal(statistics.mean(probabilities))))
+
         return g.serialize(format=return_type)
     return json.dumps(returnValue)
 
