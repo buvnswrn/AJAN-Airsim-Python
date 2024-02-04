@@ -1,9 +1,9 @@
 from flask import request, Response, jsonify, make_response
 from flask_restx import Namespace, Resource, fields
-from rdflib import Graph, RDF, Literal
+from rdflib import Graph, RDF, Literal, BNode
 
 from Configuration import global_config
-from apis.service.vocabulary.POMDPVocabulary import _rdf, _Attributes, _Observation
+from apis.service.vocabulary.POMDPVocabulary import _rdf, _Attributes, _Observation, _For_Hash
 from apis.service.vocabulary.UnityVocabulary import unity_ns, _GameObject, _Name, _Position, unity_ns1
 from constants import constants
 from .service import airsim_controller
@@ -45,7 +45,16 @@ def create_null_response(data=None):
         g = Graph().parse(data=data, format='turtle')
     else:
         g = Graph()
-    g.add((_Observation, _Attributes, RDF.nil))
+    attributes_node = BNode()
+    g.add((_Observation, _Attributes, attributes_node))
+
+    g.add((attributes_node, createIRI(pomdp_ns, "pose"), RDF.nil))
+
+    objects_node = createIRI(pomdp_ns, "objects")
+    g.add((attributes_node, objects_node, RDF.nil))
+    g.add((attributes_node, createIRI(pomdp_ns, "average_probability"), Literal(0)))
+
+    g.add((_Observation, _For_Hash, RDF.nil))
     return make_response(g.serialize(format="turtle"))
 
 
@@ -200,6 +209,7 @@ class Perceive(Resource):
 class PerceiveRDF(Resource):
     @airsim_controller_ns.doc(description="Perceive the drone environment")
     def post(self):
+        print("Perceiving")
         sensor_name = get_sensor_name()
         global previous_observation
         previous_observation = None
@@ -213,7 +223,6 @@ class PerceiveRDF(Resource):
             previous_observation = objects
         else:
             previous_observation = create_null_response()
-        print("Perceiving")
         return Response(status=200)
 
 
