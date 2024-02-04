@@ -66,7 +66,7 @@ class Move(Resource):
 
 @airsim_controller_ns.route('/move-rdf')
 @airsim_controller_ns.doc(description="Move the drone")
-class Move(Resource):
+class MoveRDF(Resource):
     @airsim_controller_ns.doc(description="Move the drone")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
@@ -95,7 +95,7 @@ class MoveOneStep(Resource):
 @airsim_controller_ns.route('/move-one-step-rdf')
 @airsim_controller_ns.doc(description="Move the drone one step forward in the given direction - left or right by "
                                       "taking rdf input")
-class MoveOneStep(Resource):
+class MoveOneStepRDF(Resource):
     @airsim_controller_ns.doc(description="Move the drone one step in a given direction")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
@@ -115,7 +115,7 @@ def get_direction():
 @airsim_controller_ns.route('/turn-one-step-rdf')
 @airsim_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
                                       "taking rdf input")
-class MoveOneStep(Resource):
+class TurnOneStepRDF(Resource):
     @airsim_controller_ns.doc(description="Turn the drone one step in a given direction")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
@@ -127,7 +127,7 @@ class MoveOneStep(Resource):
 @airsim_controller_ns.route('/turn-one-step')
 @airsim_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
                                       "taking rdf input")
-class MoveOneStep(Resource):
+class TurnOneStep(Resource):
     @airsim_controller_ns.doc(description="Turn the drone one step in a given direction")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
