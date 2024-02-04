@@ -2,17 +2,18 @@ import configparser
 
 import cv2
 from flask_restx import Namespace, Resource, fields
-from flask import request, Response, jsonify
+from flask import request, Response, jsonify, make_response
 import airsim
 import logging
-from apis.service.vocabulary.UnityVocabulary import unity_ns
-from apis.service.vocabulary.POMDPVocabulary import _rdf
+from apis.service.vocabulary.UnityVocabulary import unity_ns, _GameObject, _Name, _Position, unity_ns1
+from apis.service.vocabulary.POMDPVocabulary import _rdf, _Attributes, _Observation
 
-from rdflib import Graph, RDF
+from rdflib import Graph, RDF, BNode, Literal
 
 from constants import constants
 from .service import airsim_controller
 from Configuration import global_config
+from .service.helper import detect_pose, detect_objects
 from .service.vocabulary.POMDPVocabulary import createIRI, pomdp_ns, _Planned_Action
 
 airsim_controller_ns = Namespace('airsim_controller', description="Airsim Controller")
@@ -26,6 +27,43 @@ if global_config['DEFAULT'].getboolean('enableAirsim'):
 move_one_step_data = airsim_controller_ns.model('MoveOneStepDataFormat', {
     "direction": fields.String(required=True, description="Direction to move one step")
 })
+
+previous_observation = None
+
+
+def get_direction():
+    graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
+    attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
+    motion_iri = createIRI(pomdp_ns, "motion")
+    direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
+    return direction
+
+
+def get_sensor_name():
+    graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
+    sensor_iri = createIRI(pomdp_ns, "sensor")
+    sensor_name = str([o for s, p, o in graph.triples((None, sensor_iri, None))][0])
+    return sensor_name
+
+
+def create_null_response(data=None):
+    if data is not None:
+        g = Graph().parse(data=data, format='turtle')
+    else:
+        g = Graph()
+    g.add((_Observation, _Attributes, RDF.nil))
+    return make_response(g.serialize(format="turtle"))
+
+
+def get_position_rdf_data(position):
+    g = Graph()
+    g.add((_GameObject, _Name, Literal("drone")))
+    position_data = unity_ns1['Position']
+    g.add((_GameObject, _Position, position_data))
+    g.add((position_data, _rdf.x, Literal(position['x'])))
+    g.add((position_data, _rdf.y, Literal(position['y'])))
+    g.add((position_data, _rdf.z, Literal(position['z'])))
+    return g.serialize(format="turtle")
 
 
 @airsim_controller_ns.route('/takeoff')
@@ -104,14 +142,6 @@ class MoveOneStepRDF(Resource):
         return Response(status=200)
 
 
-def get_direction():
-    graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
-    attr_node = [s for s, p, o in graph.triples((None, RDF.type, _Planned_Action))][0]
-    motion_iri = createIRI(pomdp_ns, "motion")
-    direction = str([o for s, p, o in graph.triples((attr_node, motion_iri, None))][0])
-    return direction
-
-
 @airsim_controller_ns.route('/turn-one-step-rdf')
 @airsim_controller_ns.doc(description="Turn the drone one step forward in the given direction - left or right by "
                                       "taking rdf input")
@@ -161,6 +191,42 @@ class Perceive(Resource):
     def post(self):
         print("Perceiving")
         return Response(status=200)
+
+
+@airsim_controller_ns.route('/perceive-rdf')
+@airsim_controller_ns.doc(description="Perceive the drone environment")
+class PerceiveRDF(Resource):
+    @airsim_controller_ns.doc(description="Perceive the drone environment")
+    def post(self):
+        sensor_name = get_sensor_name()
+        global previous_observation
+        previous_observation = None
+        if sensor_name == "pose":
+            pose = make_response(detect_pose.estimate_pose(return_type="turtle"))
+            pose.mimetype = "text/plain"
+            previous_observation = pose
+        elif sensor_name == "object":
+            objects = make_response(detect_objects.detect_objects(return_type="turtle"))
+            objects.mimetype = "text/plain"
+            previous_observation = objects
+        else:
+            previous_observation = create_null_response()
+        print("Perceiving")
+        return Response(status=200)
+
+
+@airsim_controller_ns.route('/get-observation')
+@airsim_controller_ns.doc(description="Get observation from the drone environment")
+class GetObservation(Resource):
+    @airsim_controller_ns.doc(description="Get observation from the drone environment")
+    def post(self):
+        global previous_observation
+        obs = previous_observation
+        previous_observation = None
+        if obs is not None:
+            return obs
+        else:
+            return create_null_response()
 
 
 @airsim_controller_ns.route('/capture_image')
