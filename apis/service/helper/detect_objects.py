@@ -74,7 +74,7 @@ def get_object_detection(decoded_frame, id, conf=0.3, return_type="json", write=
             g.add((attributes_node, probability_node, Literal(object_probability)))
 
         g.add((attributes_node, createIRI(pomdp_ns, "average_probability"),
-               Literal(statistics.mean(probabilities))))
+               Literal(statistics.mean(probabilities) if len(probabilities) > 0 else 0)))
 
         return g.serialize(format=return_type)
     return json.dumps(returnValue)
