@@ -1,18 +1,12 @@
-import configparser
-
-import cv2
-from flask_restx import Namespace, Resource, fields
 from flask import request, Response, jsonify, make_response
-import airsim
-import logging
-from apis.service.vocabulary.UnityVocabulary import unity_ns, _GameObject, _Name, _Position, unity_ns1
+from flask_restx import Namespace, Resource, fields
+from rdflib import Graph, RDF, Literal
+
+from Configuration import global_config
 from apis.service.vocabulary.POMDPVocabulary import _rdf, _Attributes, _Observation
-
-from rdflib import Graph, RDF, BNode, Literal
-
+from apis.service.vocabulary.UnityVocabulary import unity_ns, _GameObject, _Name, _Position, unity_ns1
 from constants import constants
 from .service import airsim_controller
-from Configuration import global_config
 from .service.helper import detect_pose, detect_objects
 from .service.vocabulary.POMDPVocabulary import createIRI, pomdp_ns, _Planned_Action
 
@@ -111,11 +105,13 @@ class MoveRDF(Resource):
         if request.content_type == "application/json":
             airsim_controller.move(request.json['x'], request.json['y'], request.json['z'], request.json['v'])
         elif request.content_type == "text/turtle":
+            global previous_observation
             graph = Graph().parse(data=request.data.decode("utf-8"), format='turtle')
             x_node = [float(o) for s, p, o in graph.triples((unity_ns.position, _rdf["x"], None))][0]
             y_node = [float(o) for s, p, o in graph.triples((unity_ns.position, _rdf["y"], None))][0]
             z_node = [float(o) for s, p, o in graph.triples((unity_ns.position, _rdf["z"], None))][0]
             airsim_controller.move(x_node, y_node, z_node, 1)
+            previous_observation = create_null_response(get_position_rdf_data(airsim_controller.get_current_position()))
         return Response(status=200)
 
 
@@ -137,8 +133,10 @@ class MoveOneStepRDF(Resource):
     @airsim_controller_ns.doc(description="Move the drone one step in a given direction")
     @airsim_controller_ns.expect(move_one_step_data)
     def post(self):
+        global previous_observation
         direction = get_direction()
         airsim_controller.move_one_step(direction)
+        previous_observation = create_null_response(get_position_rdf_data(airsim_controller.get_current_position()))
         return Response(status=200)
 
 
@@ -171,7 +169,9 @@ class TurnOneStep(Resource):
 class MoveOneStepRight(Resource):
     @airsim_controller_ns.doc(description="Move the drone one step in right direction")
     def post(self):
+        global previous_observation
         airsim_controller.move_one_step("right")
+        previous_observation = create_null_response(get_position_rdf_data(airsim_controller.get_current_position()))
         return Response(status=200)
 
 
@@ -180,7 +180,9 @@ class MoveOneStepRight(Resource):
 class MoveOneStepLeft(Resource):
     @airsim_controller_ns.doc(description="Move the drone one step in left direction")
     def post(self):
+        global previous_observation
         airsim_controller.move_one_step("left")
+        previous_observation = create_null_response(get_position_rdf_data(airsim_controller.get_current_position()))
         return Response(status=200)
 
 
@@ -244,4 +246,6 @@ class GetCurrentPosition(Resource):
     @airsim_controller_ns.doc(description="Get the current position of the drone")
     def post(self):
         response = airsim_controller.get_current_position()
+        if request.content_type == "text/turtle":
+            return make_response(get_position_rdf_data(response))
         return jsonify(response)
