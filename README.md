@@ -2,7 +2,9 @@
 A Python API for communicating with Airsim
 
 ## Installation
-Install the requirements.txt file using pip
+- Create a virtual environment using the following command
+```python -m venv venv```
+- Install the requirements.txt file using pip
 ```pip install -r requirements.txt```
 
 ## Usage
