@@ -34,5 +34,5 @@ Modify the config.ini file to change the configuration of the Airsim simulator o
 - The application runs on port `5002` by default.
 
 Note: Only one of the enableAirsim and enableRealWorldExecution can be set to True at a time, if both resources are not available.
-Note: Airsim should be running before the application is started.
+Note: Airsim should be running before the application is started. and should always be restarted when the simulation is restarted.
 
