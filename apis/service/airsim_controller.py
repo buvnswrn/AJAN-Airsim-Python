@@ -119,6 +119,14 @@ def move_one_step(direction):
 
 
 def move_safer(direction, x, y, z):
+    """
+    Eradicated the issue of drone stuck in the down action due to Airsim's bug
+    :param direction: which direction to move. Only for down action the bug is eradicated
+    :param x: the x coordinate
+    :param y: the y coordinate
+    :param z: the z coordinate
+    :return: None
+    """
     if direction != "down":
         client.moveToPositionAsync(x, y, z, 1).join()
     else:
