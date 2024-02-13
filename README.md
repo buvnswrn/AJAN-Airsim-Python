@@ -35,4 +35,6 @@ Modify the config.ini file to change the configuration of the Airsim simulator o
 
 Note: Only one of the enableAirsim and enableRealWorldExecution can be set to True at a time, if both resources are not available.
 Note: Airsim should be running before the application is started. and should always be restarted when the simulation is restarted.
+Else, `WARNING:tornado.general:Connect error on fd 780: WSAECONNREFUSED` will be popping up and the instance quits after some retries or 
+If the controller is not executing any actions, it means the Airsimserver has restarted (Typically happens when a new instance of Unity is launched).
 
