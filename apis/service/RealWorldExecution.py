@@ -7,11 +7,11 @@ import requests
 from PIL import Image
 from io import BytesIO
 import cv2
-
 import constants.constants
 from apis.service.helper.navigation import Navigation
 from constants import MissionState
 from constants.mavic2_api_constants import MQTT
+from Configuration import global_config
 
 __navigation = None
 __current_state = MissionState.NOT_INITIALIZED
@@ -55,6 +55,7 @@ def get_position(x: float, y: float, z: float = 2.3, rot: float = 0, pitch: floa
         "pitch": bound(-90, 30, pitch)
     }
 
+
 def get_known_position(position):
     return {
         "position": position
@@ -65,9 +66,11 @@ def takeoff():
     __logger.info("Taking off...")
     navigation.publish(MQTT.PUBLISH_CHANNELS.TAKE_OFF_AND_HAND_OVER_CONTROL)
     take_off_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.TAKE_OFF_AND_HANDOVER_CONTROL)
-    check(navigation, MQTT.PHYSICAL.HOVERING)
     if take_off_message["status"] == "Accepted":
-        return True
+        check(navigation, MQTT.PHYSICAL.HOVERING)
+        return True, take_off_message["status"]
+    else:
+        return False, take_off_message["status"]
 
 
 def land():
@@ -84,9 +87,34 @@ def move(x, y, z):
     location = get_position(x, y, z)
     navigation.publish(MQTT.PUBLISH_CHANNELS.MOVE_TO_POINT, location)
     move_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.MOVE_TO_POINT)
-    if move_message["status"] == "Accepted" and check(navigation, "HOVERING"):
+    if move_message["status"] == "Accepted":
+        check(navigation, MQTT.PHYSICAL.HOVERING)
         # TODO: Check whether check_hovering works
         return True
+    else:
+        return False
+
+
+def turn_one_step(direction):  # not yet verified
+    pose = get_current_position()
+    current_position = pose["pos"]
+    current_rotation = pose["rot"]["x"]
+    if direction == 'left':
+        rotation = current_rotation + 90
+    elif direction == 'right':
+        rotation = current_rotation - 90
+    location = get_position(current_position["x"], current_position["y"], current_position["z"], rotation)
+    navigation.publish(MQTT.PUBLISH_CHANNELS.MOVE_TO_POINT, location)
+    move_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.MOVE_TO_POINT)
+    if move_message["status"] == "Accepted":
+        check(navigation, MQTT.PHYSICAL.HOVERING)
+        return True
+    else:
+        return False
+
+
+def get_current_position():  # not yet verified
+    return navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.POSE)
 
 
 def move_to_known_position(object_of_interest):
@@ -102,11 +130,55 @@ def capture_image(capture_folder):
     __logger.info("Capturing image...")
     filename = capture_folder + "captured_world_image_" + time.strftime("%Y%m%d-%H%M%S") + constants.constants.IMAGE_EXT
     try:
-        response = requests.get(MQTT.LIVE_IMAGE_URL)
-        img = numpy.array(Image.open(BytesIO(response.content)).convert('RGB'))[:, :, ::-1].copy()
+        img = get_image()
         cv2.imwrite(filename, img)
     except:
         __logger.debug("Cannot save Image")
+
+
+def turn_live_image_on():
+    navigation.publish(MQTT.PUBLISH_CHANNELS.startLiveImage)
+    live_image_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.startLiveImage)
+    if live_image_message["status"] == "Accepted":
+        return True
+
+
+def turn_live_image_off():
+    navigation.publish(MQTT.PUBLISH_CHANNELS.stopLiveImage)
+    live_image_message = navigation.subscribe(MQTT.SUBSCRIBE_CHANNELS.stopLiveImage)
+    if live_image_message["status"] == "Accepted":
+        return True
+
+
+def get_image_from_web_cam():
+    cap = cv2.VideoCapture(0)
+    cap.set(3, 640)
+    cap.set(4, 480)
+    img = None
+    capture_image = None
+    while True:
+        ret, frame = cap.read()
+        cv2.imshow('frame', frame)
+        k = cv2.waitKey(1)
+        if k % 256 == ord('q'):
+            break
+        if k % 256 == 32:
+            capture_image = time.time() + 3
+        if capture_image and time.time() > capture_image:
+            img = frame.copy()
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+    return img
+
+
+def get_image():
+    if not global_config['DEFAULT'].getboolean('enableRealWorldExecution'):
+        img = get_image_from_web_cam()
+        return img
+    response = requests.get(MQTT.LIVE_IMAGE_URL)
+    img = numpy.array(Image.open(BytesIO(response.content)).convert('RGB'))[:, :, ::-1].copy()
+    return img
 
 
 def get_objects(object_of_interest):
