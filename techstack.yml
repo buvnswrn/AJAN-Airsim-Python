@@ -1,0 +1,666 @@
+repo_name: buvnswrn/AJAN-Airsim-Python
+report_id: 84756e68d3809e27faacd7cdd769c6fd
+version: 0.1
+repo_type: Public
+timestamp: '2024-04-07T17:46:26+00:00'
+requested_by: buvnswrn
+provider: github
+branch: config
+detected_tools_count: 52
+tools:
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Jinja
+  description: Full featured template engine for Python
+  website_url: https://palletsprojects.com/p/jinja/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Templating Languages & Extensions
+  image_url: https://img.stackshare.io/service/2303/New_Project__20_.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Python
+  description: A clear and powerful object-oriented programming language, comparable
+    to Perl, Ruby, Scheme, or Java.
+  website_url: https://www.python.org
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/993/pUBY5pVj.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python
+  detection_source: Repo Metadata
+- name: Ruby
+  description: A dynamic, interpreted, open source programming language with a focus
+    on simplicity and productivity
+  website_url: https://www.ruby-lang.org
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/989/ruby.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Flask
+  description: A microframework for Python based on Werkzeug, Jinja 2 and good intentions
+  website_url: http://flask.pocoo.org/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Microframeworks (Backend)
+  image_url: https://img.stackshare.io/service/1001/default_6d109315b60108628b7cd3e159b84645c31ef0e2.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Matplotlib
+  description: A plotting library for the Python programming language
+  website_url: http://matplotlib.org
+  open_source: false
+  hosted_saas: false
+  category: Libraries
+  sub_category: Charting Libraries
+  image_url: https://img.stackshare.io/service/2993/2DZC4KaA_400x400.jpg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Tornado
+  description: A Python web framework and asynchronous networking library, originally
+    developed at FriendFeed
+  website_url: http://www.tornadoweb.org/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/1002/tornado.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: MQTT
+  description: A machine-to-machine Internet of Things connectivity protocol
+  website_url: http://mqtt.org/
+  open_source: false
+  hosted_saas: false
+  category: Data Stores
+  sub_category: Message Queue
+  image_url: https://img.stackshare.io/service/3670/mqtticon-large_400x400.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python
+  detection_source: Repo Metadata
+- name: PyPI
+  description: A repository of software for the Python programming language
+  website_url: https://pypi.org/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Hosted Package Repository
+  image_url: https://img.stackshare.io/service/12572/-RIWgodF_400x400.jpg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: RubyGems
+  description: Easily download, install, and use ruby software packages on your system
+  website_url: https://rubygems.org/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/service/12795/5jL6-BA5_400x400.jpeg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: pip
+  description: A package installer for Python
+  website_url: https://pypi.org/project/pip/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/5559/-RIWgodF_400x400.jpg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: OpenCV
+  description: Open Source Computer Vision Library
+  website_url: http://opencv.org/
+  open_source: true
+  hosted_saas: false
+  category: Assets and Media
+  sub_category: Image Processing and Management
+  image_url: https://img.stackshare.io/service/1293/opencv-logo-64x64.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Pillow
+  description: Python Imaging Library
+  website_url: https://python-pillow.github.io/
+  open_source: true
+  hosted_saas: false
+  category: Assets and Media
+  sub_category: Image Processing and Management
+  image_url: https://img.stackshare.io/service/2375/default_1f67b0ca7416a9f52beb655f90b5602d5ef74b75.jpg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: NumPy
+  description: Fundamental package for scientific computing with Python
+  website_url: http://www.numpy.org/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Data Science Tools
+  image_url: https://img.stackshare.io/service/2179/default_332f874a2edb2686f578aa6389313efcea1eec41.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Pandas
+  description: High-performance, easy-to-use data structures and data analysis tools
+    for the Python programming language
+  website_url: http://pandas.pydata.org/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Data Science Tools
+  image_url: https://img.stackshare.io/service/2180/1284191.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: SciPy
+  description: Scientific Computing Tools for Python
+  website_url: http://www.scipy.org
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Data Science Tools
+  image_url: https://img.stackshare.io/service/3303/scipyshiny_small.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Werkzeug
+  website_url: https://palletsprojects.com/p/werkzeug/
+  open_source: false
+  hosted_saas: false
+  image_url: https://img.stackshare.io/service/11076/iwoLyNPI_normal.jpg
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: setuptools
+  website_url: https://github.com/pypa/setuptools
+  open_source: false
+  hosted_saas: false
+  image_url: https://img.stackshare.io/service/10517/647025.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Cycler
+  description: Composable style cycles
+  package_url: https://pypi.org/project/Cycler
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/pypi/image.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: MarkupSafe
+  description: Safely add untrusted strings to HTML/XML markup
+  package_url: https://pypi.org/project/MarkupSafe
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19945/default_0b0a94e1bdf3e64deeccb23892ca2335bdc30e4f.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: PySimpleGUI
+  description: GUI SDK Launched in 2018 Actively developed and supported
+  package_url: https://pypi.org/project/PySimpleGUI
+  license: LGPL-3.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20558/default_9722bf57ec4e8fc848e7eb95803d0705ec109c3b.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: Werkzeug
+  description: The comprehensive WSGI web application library
+  package_url: https://pypi.org/project/Werkzeug
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19890/default_87fc2af3f2409064833512bb6fc5b04443a2e6aa.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: aniso8601
+  description: A library for parsing ISO 8601 strings
+  package_url: https://pypi.org/project/aniso8601
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20255/default_49d350d2ae446ec5a00ebd45eeeaa0c300409a71.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: attrs
+  description: Classes Without Boilerplate
+  package_url: https://pypi.org/project/attrs
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19857/default_4a8a8fdc10130068bf295812b98e9b72fb42fe70.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: certifi
+  description: Python package for providing Mozilla's CA Bundle
+  package_url: https://pypi.org/project/certifi
+  license: MPL-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19849/default_75c38a39b9f0062814489e2ec2cbfca0ca15d9ba.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: charset-normalizer
+  description: The Real First Universal Charset Detector
+  package_url: https://pypi.org/project/charset-normalizer
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/pypi/image.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: click
+  description: Composable command line interface toolkit
+  package_url: https://pypi.org/project/click
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19830/default_74a61b43bdb9fc0cba2978316b9976f43545029b.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: colorama
+  description: Cross-platform colored terminal text
+  package_url: https://pypi.org/project/colorama
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19845/default_accee5d2b8ed75c2245f13504daf75b1cbc8cc9f.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: fonttools
+  description: Tools to manipulate font files
+  package_url: https://pypi.org/project/fonttools
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20488/default_13373c456cf04faa5b7f33cd4c4095cbd571dfce.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: idna
+  description: Internationalized Domain Names in Applications
+  package_url: https://pypi.org/project/idna
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19863/default_f24e00e4cb7620e436f9d06e0305070e1335922a.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: importlib-metadata
+  description: Read metadata from Python packages
+  package_url: https://pypi.org/project/importlib-metadata
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20000/default_7c419d5d5f0cfad7886b95266eae7ba305cedacf.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: isodate
+  description: An ISO 8601 date/time/duration parser and formatter
+  package_url: https://pypi.org/project/isodate
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20076/default_1b6ee2407cdedc6ad8878ee707164428880e399a.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: itsdangerous
+  description: Various helpers to pass data to untrusted environments and back
+  package_url: https://pypi.org/project/itsdangerous
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19989/default_b1f1fc9c4c59a78443018e01395203ba8c61dcde.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: jsonschema
+  description: An implementation of JSON Schema validation for Python
+  package_url: https://pypi.org/project/jsonschema
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19854/default_3fbfa1d88b4408e903227ac391490e8efb8dea58.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: kiwisolver
+  description: A fast implementation of the Cassowary constraint solver
+  package_url: https://pypi.org/project/kiwisolver
+  license: Other
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20772/default_b92e3d801a6b8cc7a378e4f7c25f52a138a86391.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: msgpack-python
+  description: MessagePack
+  package_url: https://pypi.org/project/msgpack-python
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20157/default_0a9d6219a6023591895a9db3a2e96da524d7a0a8.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: opencv-python
+  description: Wrapper package for OpenCV python bindings
+  package_url: https://pypi.org/project/opencv-python
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/pypi/image.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: packaging
+  description: Core utilities for Python packages
+  package_url: https://pypi.org/project/packaging
+  license: BSD-3-Clause,Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19894/default_f716e4bc541a9eb6e3f5b7a20d7c35355075b0b4.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: paho-mqtt
+  description: MQTT version 3.1.1 client class
+  package_url: https://pypi.org/project/paho-mqtt
+  license: EPL-1.0,AAL
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19959/default_8e2d118e1c4bbcbf4b6574d34693b916f2dc4040.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: pynput
+  description: Monitor and control user input devices
+  package_url: https://pypi.org/project/pynput
+  license: LGPL-3.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20483/default_e8ecf818f54abae483b7b54d28bb2e09dbcb096f.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: pyparsing
+  description: Python parsing module
+  package_url: https://pypi.org/project/pyparsing
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19881/default_2270bfab784e3d2c2d999d26b11ee478a9dad238.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: pyrsistent
+  description: Persistent/Functional/Immutable data structures
+  package_url: https://pypi.org/project/pyrsistent
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20112/default_07c33e3fe9188a5efef46b09a8d6468a52dce7cb.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: python-dateutil
+  description: Extensions to the standard Python datetime module
+  package_url: https://pypi.org/project/python-dateutil
+  license: NRL
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19833/default_58dbe7b4d7ec447b62773209af0f9a31bbabf5bd.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: pytz
+  description: World timezone definitions, modern and historical
+  package_url: https://pypi.org/project/pytz
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19841/default_bb711fa267b2329ed689711a5adb7d9e74610b20.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: rdflib
+  description: RDFLib is a Python library for working with RDF
+  package_url: https://pypi.org/project/rdflib
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20004/default_87268cab0d3a3b3acf3aa0576d4b114b8e4c2521.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: requests
+  description: Python HTTP for Humans
+  package_url: https://pypi.org/project/requests
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19826/default_d7c684bf2673f008a9f02ac93901229297a22d7e.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: setuptools
+  description: Easily download
+  package_url: https://pypi.org/project/setuptools
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19831/default_65d1c12a133e1aa67ae96a1221c9c122ddf86c5f.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: six
+  description: Python 2 and 3 compatibility utilities
+  package_url: https://pypi.org/project/six
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19827/default_74a61b43bdb9fc0cba2978316b9976f43545029b.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: urllib3
+  description: HTTP library with thread-safe connection pooling
+  package_url: https://pypi.org/project/urllib3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/19842/default_4604ff5dcb7f4d9c7b3833591c2142493951b19c.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
+- name: zipp
+  description: Backport of pathlib-compatible object wrapper for zip files
+  package_url: https://pypi.org/project/zipp
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: PyPI Packages
+  image_url: https://img.stackshare.io/package/20247/default_47b8ee8db82e43d9eef35923435bd8cc855f3a1b.png
+  detection_source_url: https://github.com/buvnswrn/AJAN-Airsim-Python/blob/config/requirements_pycharm.txt
+  detection_source: requirements_pycharm.txt
+  last_updated_by: Bhuvaneshwaran Ilanthirayan
+  last_updated_on: 2024-02-12 19:08:11.000000000 Z
