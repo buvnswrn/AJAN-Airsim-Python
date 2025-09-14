@@ -57,7 +57,7 @@ class Navigation:
 
     def __del__(self):
         print("Disconnecting MQTT Client")
-        # self.__mqtt_client.disconnect()
+        self.__mqtt_client.disconnect()
 
     def is_initialized(self):
         return True if self.__mqtt_client is None else False

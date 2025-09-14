@@ -1,5 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask import Response, request
+
+from Configuration import global_config
 from .service import AJANPlugin, airsim_controller, UnityService, RealWorldExecution
 from constants import constants
 from multiprocessing import Process
@@ -21,7 +23,8 @@ ajan_plugin_ns.logger.info("Starting AJAN Service")
 
 
 # endregion
-airsim_controller.initialize()
+if global_config['DEFAULT'].getboolean('enableAirsim'):
+    airsim_controller.initialize()
 
 
 @ajan_plugin_ns.route('/execute_actions')

@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: AJAN Airsim
+message: REST based Airsim and Unity Communication API for AJAN
+type: software
+authors:
+  - given-names: Bhuvaneshwaran
+    family-names: Ilanthirayan
+    email: buvnswrn@gmail.com
+identifiers:
+  - type: url
+    value: 'https://github.com/buvnswrn/AJAN-Airsim-Python'
+    description: 'Github Link for AJAN-Airsim Service '
+repository-code: 'https://github.com/buvnswrn/AJAN-Airsim-Python'
+abstract: >-
+  REST API for Microsoft Airsim Framework Communication and
+  Unity Warehouse Scene Communication  from AJAN Agent
+  Framework
+keywords:
+  - ajan
+  - unity
+  - airsim
+  - rest-api
+license: GPL-3.0+
